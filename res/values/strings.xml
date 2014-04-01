@@ -4,4 +4,6 @@
     <string name="login_name">Позивний</string>
     <string name="login_password">Пароль</string>
     <string name="login_button">Увійти</string>
+    <string name="auth_error">Доступ не надано!</string>
+    <string name="auth_ok">Бажаю здоров’я, товаришу</string>
 </resources>
