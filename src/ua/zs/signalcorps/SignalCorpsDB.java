@@ -190,7 +190,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     null, // having
                     null); // orderBy
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in checkAuthInformation.");
+            throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
         }
 
         if (cursor != null) {
