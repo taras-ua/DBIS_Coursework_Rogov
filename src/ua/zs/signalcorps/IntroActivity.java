@@ -37,28 +37,32 @@ public class IntroActivity extends Activity {
     private void initiateUIElements() {
         final EditText loginText = (EditText) findViewById(R.id.loginView);
         final EditText passwordText = (EditText) findViewById(R.id.passwordView);
-
         Button loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!dataBase.isLegalAuthInformation( String.valueOf(loginText.getText()).toUpperCase(),
-                                                    String.valueOf(passwordText.getText()) )) {
-                    Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_error),
-                            Toast.LENGTH_LONG).show(); // Доступ не надано
-                } else {
-                    String authRank = Rank.toString(dataBase
-                                          .getPersonBySecretName(String.valueOf(loginText.getText()).toUpperCase())
-                                          .getRank()).toLowerCase();
-                    Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_ok) +
-                                    " " + authRank + "!", Toast.LENGTH_LONG).show();
+                loginButtonClick(String.valueOf(loginText.getText()).toUpperCase(),
+                                 String.valueOf(passwordText.getText()));
+            }
+        });
+    }
+
+    private void loginButtonClick(String login, String password) {
+        if(!dataBase.isLegalAuthInformation(login, password)) {
+            Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_error),
+                    Toast.LENGTH_LONG).show(); // Доступ не надано
+        } else {
+            String authRank = Rank.toString(dataBase
+                                    .getPersonBySecretName(login)
+                                    .getRank())
+                                    .toLowerCase();
+            Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_ok) +
+                    " " + authRank + "!", Toast.LENGTH_LONG).show();
                     /*
                      Доступ отримано
                      ...
                     */
-                }
-            }
-        });
+        }
     }
 
 }

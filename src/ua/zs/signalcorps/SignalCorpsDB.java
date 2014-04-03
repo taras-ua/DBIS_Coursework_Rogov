@@ -79,7 +79,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTWIRED);
         createTables(db);
-
     }
 
     private void createDomains(SQLiteDatabase db) {
@@ -92,7 +91,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 Log.e(DATABASE_NAME, ".createDomains threw <" + e.toString() + ">. " +
                         "Is statement <" + CREATE_MILITARY_RANK_DOMAIN + "> valid?");
             }
-
             String CREATE_CLASSIFIED_DOMAIN = "CREATE DOMAIN CLASSIFIED INTEGER " +
                     "CHECK (VALUE >= 0 AND VALUE < 4)";
             try {
@@ -101,7 +99,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 Log.e(DATABASE_NAME, ".createDomains threw <" + e.toString() + ">. " +
                         "Is statement <" + CREATE_CLASSIFIED_DOMAIN + "> valid?");
             }
-
             String CREATE_AZIMUTH_DOMAIN = "CREATE DOMAIN AZIMUTH NUMBER " +
                     "CHECK (VALUE >= 0 AND VALUE < 360)";
             try {
@@ -110,7 +107,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 Log.e(DATABASE_NAME, ".createDomains threw <" + e.toString() + ">. " +
                         "Is statement <" + CREATE_AZIMUTH_DOMAIN + "> valid?");
             }
-
             Log.i(DATABASE_NAME, ".createDomains > domains creating finished.");
         } else {
             throw new NullPointerException("Can't reach SQLDateBase in createDomains.");
@@ -322,7 +318,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
 
     public boolean addPerson(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         if(db != null) {
             if(this.getPersonBySecretName(person.getSecretName()) == null) {
                 ContentValues values = new ContentValues();
@@ -334,7 +329,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 values.put(FK_EQUIPAGE, person.getEquipage());
                 values.put(KEY_PASSWORD, person.getPersonalPassword());
                 values.put(KEY_CLASSIFIED, person.getClassified());
-
                 try {
                     db.insert(TABLE_PERSON, null, values);
                 } catch (Exception e) {
@@ -354,20 +348,17 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     public ArrayList<Person> getAllPersons() {
         ArrayList<Person> personsList = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor;
         if(db != null) {
             cursor = db.query(TABLE_PERSON, new String[] { "*" }, null, null, null, null, null);
         } else {
             throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
         }
-
         if (cursor != null) {
             cursor.moveToFirst();
         } else {
             return null;
         }
-
         do {
             personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
                                        cursor.getString(3), Integer.parseInt(cursor.getString(4)),
@@ -375,39 +366,33 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                                        Integer.parseInt(cursor.getString(7))));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
-
         return personsList;
     }
 
     public boolean isLegalAuthInformation(String login, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor;
         if(db != null) {
             cursor = db.query(TABLE_PERSON, new String[] {PK_PERSON, KEY_PASSWORD }, null, null, null, null, null);
         } else {
             throw new NullPointerException("Can't reach SQLDateBase in checkAuthInformation.");
         }
-
         if (cursor != null) {
             cursor.moveToFirst();
         } else {
             throw new NullPointerException("Null-cursor of SQLDateBase.query in checkAuthInformation.");
         }
-
         do {
             if(login.equals(cursor.getString(0)) && password.equals(cursor.getString(1))) {
                 return true;
             }
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
-
         return false;
     }
 
     public Person getPersonBySecretName(String secretName) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor;
         if(db != null) {
             cursor = db.query(TABLE_PERSON, new String[] { "*" },
@@ -419,20 +404,17 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         } else {
             throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
         }
-
         if (cursor != null) {
             cursor.moveToFirst();
         } else {
             return null;
         }
-
         if(cursor.getCount() > 0) {
             return new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
                     cursor.getString(3), Integer.parseInt(cursor.getString(4)),
                     Integer.parseInt(cursor.getString(5)), cursor.getString(6),
                     Integer.parseInt(cursor.getString(7)));
         }
-
         return null;
     }
 
