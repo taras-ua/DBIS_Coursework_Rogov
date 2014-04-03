@@ -1,6 +1,5 @@
 package ua.zs.signalcorps;
 
-
 public class Person {
 
     private String firstName;
@@ -10,9 +9,10 @@ public class Person {
     private int militaryRank;
     private int equipageCode;
     private String personalPassword;
+    private int classifiedRank;
 
     public Person(String secretName, String firstName, String fathersName, String secondName, int militaryRank,
-                  int equipageCode, String personalPassword) {
+                  int equipageCode, String personalPassword, int classifiedRank) {
         if(secretName != null && secretName.length() > 0 ) {
             this.secretName = secretName;
         } else {
@@ -44,6 +44,12 @@ public class Person {
             this.personalPassword = personalPassword;
         } else {
             throw new IllegalArgumentException("Personal password must not be null or zero-length.");
+        }
+        if(classifiedRank >=0 && classifiedRank < 5) {
+            this.classifiedRank = classifiedRank;
+        } else {
+            throw new IllegalArgumentException("Classified code must be from 0 to 4. " +
+                    "Use <Classified> class for legal constants.");
         }
     }
 
@@ -83,16 +89,29 @@ public class Person {
         }
     }
 
+    public int getClassified() {
+        return classifiedRank;
+    }
+
     public void assignToEquipage(int equipageCode) {
         this.equipageCode = equipageCode;
     }
 
     public void setMilitaryRank(int rank) {
         if(rank >=0 && rank < 20) {
-            this.militaryRank++;
+            this.militaryRank = rank;
         } else {
             throw new IllegalArgumentException("Rank code must be from 0 to 19. " +
                     "Use <Rank> class for legal constants.");
+        }
+    }
+
+    public void setClassified(int rank) {
+        if(rank >=0 && rank < 5) {
+            this.classifiedRank = rank;
+        } else {
+            throw new IllegalArgumentException("Classified code must be from 0 to 4. " +
+                    "Use <Classified> class for legal constants.");
         }
     }
 
@@ -109,9 +128,7 @@ public class Person {
                 secondName + " " +
                 firstName + " " +
                 fathersName +
-                " (позивний: " + secretName +
-                ( equipageCode!=0 ? ", екіпаж №"+String.valueOf(equipageCode) : "" ) +
-                ")"; // ex. "Капітан Коваленко Остап Іванович (позивний: ТЕРНОПІЛЬ-10, екіпаж №2715)"
+                " / " + secretName; // example: "Капітан Коваленко Остап Іванович / ТЕРНОПІЛЬ-10"
     }
 
 }

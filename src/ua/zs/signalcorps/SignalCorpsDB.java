@@ -22,6 +22,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     public static final String KEY_RANK = "rank";
     public static final String KEY_PERSONS_EQUIPAGE = "fk_equipage";
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_CLASSIFIED = "classified";
 
     public SignalCorpsDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -83,7 +84,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "family_name VARCHAR(30), " +
                     "rank MILITARY_RANK, " +
                     "fk_equipage INTEGER, " +
-                    "password VARCHAR(30))";
+                    "password VARCHAR(30), " +
+                    "classified CLASSIFIED)";
             try {
                 db.compileStatement(CREATE_PERSON_TABLE).execute(); // Create 'Person' table
             } catch (Exception e) {
@@ -108,6 +110,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 values.put(KEY_RANK, person.getRank());
                 values.put(KEY_PERSONS_EQUIPAGE, person.getEquipage());
                 values.put(KEY_PASSWORD, person.getPersonalPassword());
+                values.put(KEY_CLASSIFIED, person.getClassified());
 
                 try {
                     db.insert(TABLE_PERSON, null, values);
@@ -145,7 +148,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         do {
             personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
                                        cursor.getString(3), Integer.parseInt(cursor.getString(4)),
-                                       Integer.parseInt(cursor.getString(5)), cursor.getString(6)));
+                                       Integer.parseInt(cursor.getString(5)), cursor.getString(6),
+                                       Integer.parseInt(cursor.getString(7))));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
 
@@ -202,7 +206,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         if(cursor.getCount() > 0) {
             return new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
                     cursor.getString(3), Integer.parseInt(cursor.getString(4)),
-                    Integer.parseInt(cursor.getString(5)), cursor.getString(6));
+                    Integer.parseInt(cursor.getString(5)), cursor.getString(6),
+                    Integer.parseInt(cursor.getString(7)));
         }
 
         return null;

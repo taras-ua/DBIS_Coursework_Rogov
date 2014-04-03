@@ -19,12 +19,19 @@ public class IntroActivity extends Activity {
         initiateUIElements();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((EditText) findViewById(R.id.loginView)).setText("");
+        ((EditText) findViewById(R.id.passwordView)).setText("");
+    }
+
     private void initiateDB() {
         dataBase = new SignalCorpsDB(this);
         dataBase.addPerson(new Person("КИЇВ-1", "Михайло", "Володимирович", "Коваль",
-                Rank.GENERAL_POLKOVNYK, 0, "1234")); // Example user 1
+                Rank.GENERAL_POLKOVNYK, 0, "1234", Classified.TOP_SECRET)); // Example user 1
         dataBase.addPerson(new Person("ЛЬВІВ-5", "Тарас", "Дмитрович", "Рогов",
-                Rank.JUNIOR_LIEUTENANT, 23, "1234")); // Example user 2
+                Rank.JUNIOR_LIEUTENANT, 23, "1234", Classified.CONFIDENTIAL)); // Example user 2
     }
 
     private void initiateUIElements() {
