@@ -1,6 +1,7 @@
 package ua.zs.signalcorps;
 
 import java.util.Date;
+import ua.zs.elements.*;
 
 public class WiredContact extends Contact {
 

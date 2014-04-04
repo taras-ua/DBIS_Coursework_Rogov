@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Military"
+           parent="@style/Theme.AppCompat">
+        <item name="android:actionBarStyle">@style/Military.ActionBar</item>
+    </style>
+    <style name="Military.ActionBar"
+           parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@drawable/action_bar_back</item>
+        <item name="android:titleTextStyle">@style/Military.TitleTextStyle</item>
+    </style>
+    <style name="Military.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/LMilitary</item>
+    </style>
+</resources>

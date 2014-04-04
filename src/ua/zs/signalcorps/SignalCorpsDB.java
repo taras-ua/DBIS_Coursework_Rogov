@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import java.util.*;
+import ua.zs.elements.*;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
@@ -15,15 +16,15 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
 
     public static final String TABLE_PERSON = "person";
     public static final String TABLE_CONTACT = "contact";
-    public static final String TABLE_CONTACTCOURIER = "contact_courier";
+    public static final String TABLE_CONTACT_COURIER = "contact_courier";
     public static final String TABLE_EQUIPAGE = "equipage";
     public static final String TABLE_PACKAGE = "package";
-    public static final String TABLE_CONTACTRADIO = "contact_radio";
-    public static final String TABLE_CONTACTRADIORELATED = "contact_radiorelated";
-    public static final String TABLE_CONTACTSATELLITE = "contact_satellite";
+    public static final String TABLE_CONTACT_RADIO = "contact_radio";
+    public static final String TABLE_CONTACT_RADIORELATED = "contact_radiorelated";
+    public static final String TABLE_CONTACT_SATELLITE = "contact_satellite";
     public static final String TABLE_TRANSPORT = "transport";
     public static final String TABLE_WEAPON = "weapon";
-    public static final String TABLE_CONTACTWIRED = "contact_wired";
+    public static final String TABLE_CONTACT_WIRED = "contact_wired";
 
     public static final String PK_PERSON = "id_person";
     public static final String PK_CONTACT = "id_contact";
@@ -69,15 +70,15 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         Log.i(DATABASE_NAME, ".onUpgrade > DB upgrading started.");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTCOURIER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_COURIER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPAGE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PACKAGE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTRADIO);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTRADIORELATED);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTSATELLITE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_RADIO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_RADIORELATED);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_SATELLITE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTWIRED);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_WIRED);
         createTables(db);
     }
 

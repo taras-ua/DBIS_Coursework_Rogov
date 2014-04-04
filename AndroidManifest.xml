@@ -5,13 +5,36 @@
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        />
     <application android:label="@string/app_name" android:icon="@drawable/signalcorps_logo">
         <activity android:name="IntroActivity"
-                android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
+                  android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".PeopleActivity"
+                  android:label="@string/people"
+                  android:theme="@style/Military">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+        </activity>
+        <activity android:name=".AddPersonActivity"
+                  android:label="@string/add_person"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.PeopleActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ua.zs.signalcorps.PeopleActivity"/>
         </activity>
     </application>
 </manifest>

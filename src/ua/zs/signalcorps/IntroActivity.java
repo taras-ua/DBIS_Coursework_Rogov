@@ -1,11 +1,13 @@
 package ua.zs.signalcorps;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import ua.zs.elements.*;
 
 public class IntroActivity extends Activity {
 
@@ -29,7 +31,7 @@ public class IntroActivity extends Activity {
     private void initiateDB() {
         dataBase = new SignalCorpsDB(this);
         dataBase.addPerson(new Person("КИЇВ-1", "Михайло", "Володимирович", "Коваль",
-                Rank.GENERAL_POLKOVNYK, 0, "1234", Classified.TOP_SECRET)); // Example user 1
+                Rank.GENERAL_OF_ARMY, 0, "1234", Classified.TOP_SECRET)); // Example user 1
         dataBase.addPerson(new Person("ЛЬВІВ-5", "Тарас", "Дмитрович", "Рогов",
                 Rank.JUNIOR_LIEUTENANT, 23, "1234", Classified.CONFIDENTIAL)); // Example user 2
     }
@@ -58,10 +60,9 @@ public class IntroActivity extends Activity {
                                     .toLowerCase();
             Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_ok) +
                     " " + authRank + "!", Toast.LENGTH_LONG).show();
-                    /*
-                     Доступ отримано
-                     ...
-                    */
+            Intent intent = new Intent(IntroActivity.this,PeopleActivity.class);
+            finish();
+            startActivity(intent);
         }
     }
 
