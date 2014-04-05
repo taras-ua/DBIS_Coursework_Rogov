@@ -31,6 +31,12 @@ public class PeopleActivity extends ActionBarActivity {
         handleIntent(getIntent());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleIntent(getIntent());
+    }
+
     private void initiateListView() {
         ListView list = (ListView) findViewById(R.id.peopleView);
         SignalCorpsDB dataBase = new SignalCorpsDB(this);
@@ -116,13 +122,12 @@ public class PeopleActivity extends ActionBarActivity {
         String search = query.toUpperCase();
         ListView list = (ListView) findViewById(R.id.peopleView);
         SignalCorpsDB dataBase = new SignalCorpsDB(this);
-        ArrayList<Person> peopleList = dataBase.getAllPersons();
+        ArrayList<Person> peopleList = dataBase.getAllPersons(); //dataBase.getPersonBySearchQuery(query);
         for (int i = 0; i < peopleList.size(); i++) {
             if(!( peopleList.get(i).getFirstName().toUpperCase().contains(search) ||           // Фільтр по імені
                   peopleList.get(i).getSecondName().toUpperCase().contains(search) ||          // Фільтр по прізвищу
                   peopleList.get(i).getFathersName().toUpperCase().contains(search) ||         // Фільтр по по батькові
                   peopleList.get(i).getSecretName().toUpperCase().contains(search) ||          // Фільтр по позивному
-                  Rank.toString(peopleList.get(i).getRank()).toUpperCase().equals(search) ||   // Фільтр по званню
                   (peopleList.get(i).getEquipage() != 0 ?
                           String.valueOf(peopleList.get(i).getEquipage()) :
                           "").equals(search) )) {                                              // Пошук по екіпажу
@@ -137,7 +142,7 @@ public class PeopleActivity extends ActionBarActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            setTitle(getTitle() + " / фільтр: " + query);
+            setTitle(getResources().getString(R.string.people) + " / фільтр: " + query);
             searchPerson(query);
         } else {
             initiateListView();

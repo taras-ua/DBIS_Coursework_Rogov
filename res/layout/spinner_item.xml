@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/textView"
+        android:textColor="@color/DMilitary" android:singleLine="true" android:ellipsize="marquee"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium" android:textColorHint="@color/MMilitary"
+        android:hint="@string/rank" android:maxWidth="500dp" android:minWidth="200dp"></TextView>

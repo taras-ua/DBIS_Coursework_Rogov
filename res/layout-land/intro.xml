@@ -18,13 +18,13 @@
                 android:id="@+id/loginView" android:hint="@string/login_name" android:textColor="@color/LMilitary"
                 android:textColorHint="@color/MMilitary" android:singleLine="true" android:minWidth="200dp"
                 android:capitalize="characters" android:editable="true" android:enabled="true"
-                />
+                android:background="@drawable/edit_field" android:layout_margin="5dp"/>
         <EditText
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:id="@+id/passwordView" android:hint="@string/login_password" android:textColor="@color/LMilitary"
                 android:textColorHint="@color/MMilitary" android:singleLine="true" android:password="true"
                 android:minWidth="200dp" android:editable="true" android:enabled="true"
-                />
+                android:background="@drawable/edit_field" android:layout_margin="5dp"/>
         <Button
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="@string/login_button" android:id="@+id/loginButton" android:layout_margin="25dp"

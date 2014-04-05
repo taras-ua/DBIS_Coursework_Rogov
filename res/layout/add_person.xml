@@ -1,7 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:background="@color/LMilitary">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/addPersonParent"
               android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" android:background="@color/LMilitary">
-</LinearLayout>
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/loginnameRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"
+                    android:ems="10"
+                    android:id="@+id/loginnameText" android:hint="@string/login_name" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/loginnameNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/surnameRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords|textPersonName"
+                    android:ems="10"
+                    android:id="@+id/surnameText" android:hint="@string/surname" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/surnameNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/nameRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords|textPersonName"
+                    android:ems="10"
+                    android:id="@+id/nameText" android:hint="@string/name" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/nameNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/fathernameRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords|textPersonName"
+                    android:ems="10"
+                    android:id="@+id/fathernameText" android:hint="@string/fathername" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/rankRow">
+            <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rankText" android:minWidth="200dp" android:layout_margin="10dp"
+                    android:spinnerMode="dropdown" android:background="@drawable/spinner_back"
+                    android:minHeight="25dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/rankNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/equipageRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/equipageText" android:hint="@string/equipage_number" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field" android:inputType="number"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/classifiedRow">
+            <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/classifiedText" android:minWidth="200dp" android:layout_margin="10dp"
+                    android:spinnerMode="dropdown" android:background="@drawable/spinner_back"
+                    android:minHeight="25dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/classifiedNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/passwordRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/passwordText" android:hint="@string/login_password" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field" android:inputType="textPassword"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/passwordNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/repeatPasswordRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/repeatPasswordText" android:hint="@string/repeat_password" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field" android:inputType="textPassword"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/repeatPasswordNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/addHint" android:textColor="@color/MMilitary" android:editable="false"
+                android:clickable="false" android:layout_margin="10dp" android:text="@string/star_hint"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/buttonsRow" android:gravity="center">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:id="@+id/buttonAdd" android:layout_margin="25dp" android:background="@drawable/button"
+                    android:textColor="@color/DMilitary" android:clickable="true" android:minWidth="100dp"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:id="@+id/buttonCancel" android:layout_margin="25dp" android:background="@drawable/button"
+                    android:textColor="@color/DMilitary" android:clickable="true" android:minWidth="100dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
