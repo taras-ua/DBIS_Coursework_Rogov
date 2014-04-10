@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import ua.zs.elements.*;
@@ -28,6 +29,7 @@ public class PeopleActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.people);
         initiateActionBarIconButton();
+        initiateDrawerButtons();
         handleIntent(getIntent());
     }
 
@@ -147,6 +149,18 @@ public class PeopleActivity extends ActionBarActivity {
         } else {
             initiateListView();
         }
+    }
+
+    private void initiateDrawerButtons() {
+        Button navigatePeople = (Button) findViewById(R.id.peopleDrawer);
+        navigatePeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(PeopleActivity.this, PeopleActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
