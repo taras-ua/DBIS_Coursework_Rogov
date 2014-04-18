@@ -3,6 +3,9 @@
     <style name="Military"
            parent="@style/Theme.AppCompat">
         <item name="android:actionBarStyle">@style/Military.ActionBar</item>
+        <item name="android:popupMenuStyle">@style/Military.PopupMenu</item>
+        <item name="android:itemTextAppearance">@style/Military.PopupTextStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/Military.OverFlow</item>
     </style>
     <style name="Military.ActionBar"
            parent="@android:style/Widget.Holo.ActionBar.Solid">
@@ -12,4 +15,12 @@
     <style name="Military.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/LMilitary</item>
     </style>
+    <style name="Military.PopupMenu" parent="android:Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/DMilitary</item>
+    </style>
+    <style name="Military.PopupTextStyle" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
+        <item name="android:textColor">@color/LMilitary</item>
+    </style><style name="Military.OverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+    <item name="android:src">@drawable/ic_action_overflow</item>
+</style>
 </resources>

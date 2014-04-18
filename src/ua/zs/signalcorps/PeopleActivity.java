@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import ua.zs.elements.*;
-
 import java.util.ArrayList;
 
 public class PeopleActivity extends ActionBarActivity {
@@ -95,6 +94,9 @@ public class PeopleActivity extends ActionBarActivity {
             case R.id.people_menu_add:
                 initiatePersonAdding();
                 return true;
+            case R.id.logout:
+                userLogout();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -126,10 +128,10 @@ public class PeopleActivity extends ActionBarActivity {
         SignalCorpsDB dataBase = new SignalCorpsDB(this);
         ArrayList<Person> peopleList = dataBase.getAllPersons(); //dataBase.getPersonBySearchQuery(query);
         for (int i = 0; i < peopleList.size(); i++) {
-            if(!( peopleList.get(i).getFirstName().toUpperCase().contains(search) ||           // Фільтр по імені
-                  peopleList.get(i).getSecondName().toUpperCase().contains(search) ||          // Фільтр по прізвищу
-                  peopleList.get(i).getFathersName().toUpperCase().contains(search) ||         // Фільтр по по батькові
-                  peopleList.get(i).getSecretName().toUpperCase().contains(search) ||          // Фільтр по позивному
+            if(!( peopleList.get(i).getFirstName().toUpperCase().startsWith(search) ||           // Фільтр по імені
+                  peopleList.get(i).getSecondName().toUpperCase().startsWith(search) ||          // Фільтр по прізвищу
+                  peopleList.get(i).getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по батькові
+                  peopleList.get(i).getSecretName().toUpperCase().startsWith(search) ||          // Фільтр по позивному
                   (peopleList.get(i).getEquipage() != 0 ?
                           String.valueOf(peopleList.get(i).getEquipage()) :
                           "").equals(search) )) {                                              // Пошук по екіпажу
@@ -152,7 +154,16 @@ public class PeopleActivity extends ActionBarActivity {
     }
 
     private void initiateDrawerButtons() {
-        Button navigatePeople = (Button) findViewById(R.id.peopleDrawer);
+        Button navigateHome = (Button) findViewById(R.id.homeButton);
+        navigateHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(PeopleActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button navigatePeople = (Button) findViewById(R.id.peopleButton);
         navigatePeople.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +172,12 @@ public class PeopleActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void userLogout() {
+        finish();
+        Intent intent = new Intent(PeopleActivity.this, IntroActivity.class);
+        startActivity(intent);
     }
 
 }

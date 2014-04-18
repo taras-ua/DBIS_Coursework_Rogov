@@ -50,4 +50,8 @@
     <string name="CONFIDENTIAL">Форма 3</string>
     <string name="SECRET">Форма 2</string>
     <string name="TOP_SECRET">Форма 1</string>
+    <string name="profile">Профіль</string>
+    <string name="logout">Вийти</string>
+    <string name="weapon_of_person">Приписана зброя:</string>
+    <string name="weapon_not_found">Відсутня</string>
 </resources>

@@ -36,5 +36,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ua.zs.signalcorps.PeopleActivity"/>
         </activity>
+        <activity android:name=".HomeActivity"
+                  android:label="@string/profile"
+                  android:theme="@style/Military"/>
     </application>
 </manifest>

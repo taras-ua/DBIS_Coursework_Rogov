@@ -10,4 +10,6 @@
           android:icon="@drawable/ic_action_add_person"
           android:title="@string/action_search"
           ua.zs.signalcorps:showAsAction="ifRoom"/>
+    <item android:id="@+id/logout"
+          android:title="@string/logout"/>
 </menu>

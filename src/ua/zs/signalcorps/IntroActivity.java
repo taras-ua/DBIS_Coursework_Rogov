@@ -32,8 +32,6 @@ public class IntroActivity extends Activity {
         dataBase = new SignalCorpsDB(this);
         dataBase.addPerson(new Person("КИЇВ-1", "Михайло", "Володимирович", "Коваль",
                 Rank.GENERAL_OF_ARMY, 0, "1234", Classified.TOP_SECRET)); // Example user 1
-        dataBase.addPerson(new Person("ЛЬВІВ-5", "Тарас", "Дмитрович", "Рогов",
-                Rank.JUNIOR_LIEUTENANT, 23, "1234", Classified.CONFIDENTIAL)); // Example user 2
     }
 
     private void initiateUIElements() {
@@ -54,13 +52,13 @@ public class IntroActivity extends Activity {
             Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_error),
                     Toast.LENGTH_LONG).show(); // Доступ не надано
         } else {
-            String authRank = Rank.toString(dataBase
-                                    .getPersonBySecretName(login)
-                                    .getRank())
-                                    .toLowerCase();
+            HomeActivity.user = dataBase.getPersonBySecretName(login);
+            String authRank = Rank.toString(HomeActivity.user
+                                                        .getRank())
+                                                        .toLowerCase();
             Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_ok) +
                     " " + authRank + "!", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(IntroActivity.this,PeopleActivity.class);
+            Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
             finish();
             startActivity(intent);
         }

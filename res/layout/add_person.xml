@@ -24,7 +24,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/loginnameNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/loginnameNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/surnameNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/surnameNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/nameNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/nameNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/rankNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/rankNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/classifiedNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/classifiedNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -139,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/passwordNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/passwordNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -157,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:id="@+id/repeatPasswordNeededMark" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+                    android:id="@+id/repeatPasswordNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
         </LinearLayout>
         <TextView
                 android:layout_width="wrap_content"

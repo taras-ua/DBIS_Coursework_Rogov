@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ua.zs.elements.*;
-
 import java.util.List;
 
 public class PersonArrayAdapter extends ArrayAdapter<Person> {

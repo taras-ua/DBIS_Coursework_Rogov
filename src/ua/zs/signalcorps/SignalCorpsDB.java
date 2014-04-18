@@ -83,6 +83,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         createTables(db);
     }
 
+    // ###################################### DOMAINS CREATION ######################################
+
     private void createDomains(SQLiteDatabase db) {
         if(db != null) {
             String CREATE_MILITARY_RANK_DOMAIN = "CREATE DOMAIN MILITARY_RANK INTEGER " +
@@ -114,6 +116,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             throw new NullPointerException("Can't reach SQLDateBase in createDomains.");
         }
     }
+
+    // ###################################### TABLES CREATION ######################################
 
     private void createTables(SQLiteDatabase db) {
         createPersonTable(db);
@@ -318,6 +322,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         }
     }
 
+    // ###################################### WORK WITH PERSON TABLE ######################################
+
     public boolean addPerson(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         if(db != null) {
@@ -371,6 +377,100 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return personsList;
     }
 
+    public boolean isLegalAuthInformation(String login, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PERSON, new String[] {PK_PERSON, KEY_PASSWORD }, null, null, null, null, null);
+        } else {
+            throw new NullPointerException("Can't reach SQLDateBase in checkAuthInformation.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            throw new NullPointerException("Null-cursor of SQLDateBase.query in checkAuthInformation.");
+        }
+        do {
+            if(login.equals(cursor.getString(0)) && password.equals(cursor.getString(1))) {
+                return true;
+            }
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return false;
+    }
+
+    public ArrayList<Person> getPersonBySearchQuery(String search) {
+        String searchString = search.toUpperCase();
+        ArrayList<Person> personsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        String queryForEquipage = " OR " + FK_EQUIPAGE + "=" + searchString;
+        try {
+            Integer equipage = Integer.parseInt(searchString);
+            if(equipage.equals(Integer.valueOf(0))) {
+                queryForEquipage = "";
+            }
+        } catch(NumberFormatException e) {
+            queryForEquipage = "";       // This will cancel searching integer fields if search string is NaN
+        }
+        if(db != null) {
+            cursor = db.query(TABLE_PERSON, new String[] { "*" },
+                    "upper(" + KEY_NAME + ") LIKE '" + searchString + "%' OR " +
+                            "upper(" + PK_PERSON + ") LIKE '" + searchString + "%' OR " +
+                            "upper(" + KEY_FAMILY_NAME + ") LIKE '" + searchString + "%' OR " +
+                            "upper(" + KEY_FATHER_NAME + ") LIKE '" + searchString + "%'" +
+                            queryForEquipage, // where
+                    null, // params
+                    null, // groupBy
+                    null, // having
+                    KEY_RANK); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) do {
+            personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3), cursor.getInt(4),
+                    cursor.getInt(5), cursor.getString(6),
+                    cursor.getInt(7)));
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return personsList;
+    }
+
+    public Person getPersonBySecretName(String secretName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PERSON, new String[] { "*" },
+                    PK_PERSON + " = ?", // where
+                    new String[] { secretName }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    null); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) {
+            return new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3), cursor.getInt(4),
+                    cursor.getInt(5), cursor.getString(6),
+                    cursor.getInt(7));
+        }
+        return null;
+    }
+
+    // ###################################### WORK WITH EQUIPAGE TABLE ######################################
+
     public ArrayList<Equipage> getAllEquipages() {
         ArrayList<Equipage> equipageList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -416,6 +516,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return null;
     }
 
+    // ###################################### WORK WITH TRANSPORT TABLE ######################################
+
     public ArrayList<Transport> getAllTransport() {
         ArrayList<Transport> transportList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -437,6 +539,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         } while(!cursor.isAfterLast());
         return transportList;
     }
+
+    // ###################################### WORK WITH WEAPON TABLE ######################################
 
     public ArrayList<Weapon> getAllWeapon() {
         ArrayList<Weapon> weaponList = new ArrayList<>();
@@ -460,38 +564,17 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return weaponList;
     }
 
-    public boolean isLegalAuthInformation(String login, String password) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor;
-        if(db != null) {
-            cursor = db.query(TABLE_PERSON, new String[] {PK_PERSON, KEY_PASSWORD }, null, null, null, null, null);
-        } else {
-            throw new NullPointerException("Can't reach SQLDateBase in checkAuthInformation.");
-        }
-        if (cursor != null) {
-            cursor.moveToFirst();
-        } else {
-            throw new NullPointerException("Null-cursor of SQLDateBase.query in checkAuthInformation.");
-        }
-        do {
-            if(login.equals(cursor.getString(0)) && password.equals(cursor.getString(1))) {
-                return true;
-            }
-            cursor.moveToNext();
-        } while(!cursor.isAfterLast());
-        return false;
-    }
-
-    public Person getPersonBySecretName(String secretName) {
+    public ArrayList<Weapon> getWeaponOfPerson(String secretName) {
+        ArrayList<Weapon> weaponList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
         if(db != null) {
-            cursor = db.query(TABLE_PERSON, new String[] { "*" },
-                    PK_PERSON + " = ?", // where
+            cursor = db.query(TABLE_WEAPON, new String[] { "*" },
+                    FK_PERSON + " = ?", // where
                     new String[] { secretName }, // value to replace "?"
                     null, // groupBy
                     null, // having
-                    null); // orderBy
+                    KEY_MODEL); // orderBy
         } else {
             throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
         }
@@ -500,56 +583,12 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         } else {
             return null;
         }
-        if(cursor.getCount() > 0) {
-            return new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getInt(4),
-                    cursor.getInt(5), cursor.getString(6),
-                    cursor.getInt(7));
-        }
-        return null;
-    }
-
-    public ArrayList<Person> getPersonBySearchQuery(String search) {
-        String searchString = search.toUpperCase();
-        ArrayList<Person> personsList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
-        String queryForEquipage = " OR " + FK_EQUIPAGE + "=" + searchString;
-        try {
-            Integer equipage = Integer.parseInt(searchString);
-            if(equipage.equals(Integer.valueOf(0))) {
-                queryForEquipage = "";
-            }
-        } catch(NumberFormatException e) {
-            queryForEquipage = "";       // This will cancel searching integer fields if search string is NaN
-        }
-        if(db != null) {
-            cursor = db.query(TABLE_PERSON, new String[] { "*" },
-                    "upper(" + KEY_NAME + ") LIKE '" + searchString + "%' OR " +
-                    "upper(" + PK_PERSON + ") LIKE '" + searchString + "%' OR " +
-                    "upper(" + KEY_FAMILY_NAME + ") LIKE '" + searchString + "%' OR " +
-                    "upper(" + KEY_FATHER_NAME + ") LIKE '" + searchString + "%'" +
-                    queryForEquipage, // where
-                    null, // params
-                    null, // groupBy
-                    null, // having
-                    KEY_RANK); // orderBy
-        } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
-        }
-        if (cursor != null) {
-            cursor.moveToFirst();
-        } else {
-            return null;
-        }
         if(cursor.getCount() > 0) do {
-            personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getInt(4),
-                    cursor.getInt(5), cursor.getString(6),
-                    cursor.getInt(7)));
+            weaponList.add(new Weapon(cursor.getInt(0), cursor.getString(1),
+                    getPersonBySecretName(cursor.getString(2))));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
-        return personsList;
+        return weaponList;
     }
 
 }

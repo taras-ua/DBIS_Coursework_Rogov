@@ -22,13 +22,27 @@
                   android:id="@+id/peopleMenu"
                   android:layout_alignParentLeft="true"
                   android:background="@color/DMilitary">
-        <Button
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/people" android:id="@+id/peopleButton" android:layout_margin="5dp"
-                android:paddingLeft="10dp" android:paddingRight="10dp"
-                android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
-                android:drawableLeft="@drawable/ic_action_group"
-                android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
-                android:minWidth="230dp"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/menuParent"
+                      android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <Button
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/profile" android:id="@+id/homeButton" android:layout_margin="5dp"
+                    android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:drawableLeft="@drawable/ic_action_person"
+                    android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
+                    android:minWidth="230dp"/>
+            <Button
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/people" android:id="@+id/peopleButton" android:layout_margin="5dp"
+                    android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:drawableLeft="@drawable/ic_action_group"
+                    android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
+                    android:minWidth="230dp"/>
+        </LinearLayout>
     </ScrollView>
 </android.support.v4.widget.DrawerLayout>
