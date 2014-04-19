@@ -113,6 +113,38 @@
                     android:drawableLeft="@drawable/ic_action_group"
                     android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
                     android:minWidth="230dp"/>
+            <Button
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/equipages" android:id="@+id/equipagesButton" android:layout_margin="5dp"
+                    android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:drawableLeft="@drawable/ic_action_equipage"
+                    android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
+                    android:minWidth="230dp"/>
+            <Button
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/contacts" android:id="@+id/contactsButton" android:layout_margin="5dp"
+                    android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:drawableLeft="@drawable/ic_action_contact"
+                    android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
+                    android:minWidth="230dp"/>
+            <Button
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/transport" android:id="@+id/transportButton" android:layout_margin="5dp"
+                    android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:drawableLeft="@drawable/ic_action_transport"
+                    android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
+                    android:minWidth="230dp"/>
+            <Button
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/weapon" android:id="@+id/weaponButton" android:layout_margin="5dp"
+                    android:paddingLeft="10dp" android:paddingRight="10dp"
+                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:drawableLeft="@drawable/ic_action_weapon"
+                    android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
+                    android:minWidth="230dp"/>
         </LinearLayout>
     </ScrollView>
 </android.support.v4.widget.DrawerLayout>

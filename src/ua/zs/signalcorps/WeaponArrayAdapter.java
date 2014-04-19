@@ -31,13 +31,14 @@ public class WeaponArrayAdapter extends ArrayAdapter<Weapon> {
         TextView id = (TextView) rowView.findViewById(R.id.numberView);
         TextView owner = (TextView) rowView.findViewById(R.id.ownerView);
         model.setText(list.get(position).getModel());
-        id.setText(" №" + String.valueOf(list.get(position).getId()));
+        id.setText(context.getString(R.string.number_sym) + String.valueOf(list.get(position).getId()));
         owner.setText(showOwner ? ownerText(list.get(position).getOwner()) : "");
         return rowView;
     }
     
     private String ownerText(Person person) {
-        return "Власник: " + person.getSecondName() + " " +
+        return context.getString(R.string.owner) +
+                             person.getSecondName() + " " +
                              person.getFirstName() + " " +
                              person.getFathersName();
     }

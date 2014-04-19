@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/peopleDrawer"
+        android:id="@+id/contactsDrawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/peopleParent"
+                  android:id="@+id/contactsParentLayout"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent" android:background="@color/LMilitary">
-        <ListView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/peopleView"/>
+                  android:layout_height="match_parent"
+                  android:background="@color/LMilitary">
+        
     </LinearLayout>
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:layout_gravity="left"
-                  android:id="@+id/peopleMenu"
-                  android:layout_alignParentLeft="true"
-                  android:background="@color/DMilitary">
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:id="@+id/contactsMenu"
+                android:layout_alignParentLeft="true"
+                android:background="@color/DMilitary">
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:id="@+id/menuParent"
                       android:orientation="vertical"

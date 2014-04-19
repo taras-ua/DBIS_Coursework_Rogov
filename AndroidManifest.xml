@@ -39,5 +39,17 @@
         <activity android:name=".HomeActivity"
                   android:label="@string/profile"
                   android:theme="@style/Military"/>
+        <activity android:name=".EquipageActivity"
+                  android:label="@string/equipages"
+                  android:theme="@style/Military"/>
+        <activity android:name=".ContactsActivity"
+                  android:label="@string/contacts"
+                  android:theme="@style/Military"/>
+        <activity android:name=".TransportActivity"
+                  android:label="@string/transport"
+                  android:theme="@style/Military"/>
+        <activity android:name=".WeaponActivity"
+                  android:label="@string/weapon"
+                  android:theme="@style/Military"/>
     </application>
 </manifest>

@@ -42,8 +42,9 @@ public class HomeActivity extends ActionBarActivity {
                 user.getFathersName());
         secret.setText(user.getSecretName());
         equipage.setText(user.getEquipage() != 0 ?
-                "Екіпаж №" + String.valueOf(user.getEquipage()) :
-                "Не приписаний до екіпажу");
+                getResources().getString(R.string.equipage_id) +
+                        String.valueOf(user.getEquipage()) :
+                getResources().getString(R.string.no_equipage));
         equipage.setEnabled(user.getEquipage() != 0);
         equipage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +142,42 @@ public class HomeActivity extends ActionBarActivity {
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(HomeActivity.this, PeopleActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button navigateEquipage = (Button) findViewById(R.id.equipagesButton);
+        navigateEquipage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(HomeActivity.this, EquipageActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button navigateContacts = (Button) findViewById(R.id.contactsButton);
+        navigateContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(HomeActivity.this, ContactsActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button navigateTransport = (Button) findViewById(R.id.transportButton);
+        navigateTransport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(HomeActivity.this, TransportActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button navigateWeapon = (Button) findViewById(R.id.weaponButton);
+        navigateWeapon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(HomeActivity.this, WeaponActivity.class);
                 startActivity(intent);
             }
         });

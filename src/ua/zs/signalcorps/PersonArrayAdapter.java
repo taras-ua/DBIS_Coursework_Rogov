@@ -36,7 +36,8 @@ public class PersonArrayAdapter extends ArrayAdapter<Person> {
         rank.setImageResource(Rank.toImage(list.get(position).getRank()));
         secret.setText(list.get(position).getSecretName());
         equipage.setText(list.get(position).getEquipage() != 0 ?
-                            "Екіпаж №" + String.valueOf(list.get(position).getEquipage()) :
+                            context.getString(R.string.equipage_id) +
+                            String.valueOf(list.get(position).getEquipage()) :
                             "");
         return rowView;
     }

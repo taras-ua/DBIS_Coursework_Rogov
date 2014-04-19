@@ -27,7 +27,7 @@
     <string name="equipage_number">Номер екіпажу</string>
     <string name="repeat_password">Повторіть пароль</string>
     <string name="CIVILIAN">Цивільний</string>
-    <string name="SOLDIER">Солдат</string>
+    <string name="SOLDIER">Рядовий</string>
     <string name="SENIOR_SOLDIER">Старший солдат</string>
     <string name="JUNIOR_SERGEANT">Молодший сержант</string>
     <string name="SERGEANT">Сержант</string>
@@ -54,4 +54,13 @@
     <string name="logout">Вийти</string>
     <string name="weapon_of_person">Приписана зброя:</string>
     <string name="weapon_not_found">Відсутня</string>
+    <string name="transport">Транспорт</string>
+    <string name="contacts">Контакти</string>
+    <string name="weapon">Зброя</string>
+    <string name="equipages">Екіпажі</string>
+    <string name="equipage_id">Екіпаж №</string>
+    <string name="no_equipage">Не приписаний до екіпажу</string>
+    <string name="search_query"> / фільтр: </string>
+    <string name="number_sym"> №</string>
+    <string name="owner">Власник: </string>
 </resources>
