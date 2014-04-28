@@ -10,7 +10,10 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:background="@color/LMilitary">
-        
+        <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/weaponView"/>
     </LinearLayout>
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
@@ -69,7 +72,7 @@
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="@string/weapon" android:id="@+id/weaponButton" android:layout_margin="5dp"
                     android:paddingLeft="10dp" android:paddingRight="10dp"
-                    android:textColor="@color/LMilitary" android:background="@drawable/button_drawer"
+                    android:textColor="@color/LMilitary" android:background="@drawable/semitransparent_sample"
                     android:drawableLeft="@drawable/ic_action_weapon"
                     android:clickable="true" android:enabled="true" android:gravity="center_vertical|left"
                     android:minWidth="230dp"/>

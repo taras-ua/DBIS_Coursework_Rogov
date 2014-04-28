@@ -124,9 +124,10 @@ public class TransportActivity extends ActionBarActivity {
         navigateTransport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(TransportActivity.this, TransportActivity.class);
-                startActivity(intent);
+                //finish();
+                //Intent intent = new Intent(TransportActivity.this, TransportActivity.class);
+                //startActivity(intent);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
         Button navigateWeapon = (Button) findViewById(R.id.weaponButton);

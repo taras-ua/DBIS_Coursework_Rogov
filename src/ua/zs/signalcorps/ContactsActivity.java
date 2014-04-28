@@ -115,9 +115,10 @@ public class ContactsActivity extends ActionBarActivity {
         navigateContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(ContactsActivity.this, ContactsActivity.class);
-                startActivity(intent);
+                //finish();
+                //Intent intent = new Intent(ContactsActivity.this, ContactsActivity.class);
+                //startActivity(intent);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
         Button navigateTransport = (Button) findViewById(R.id.transportButton);

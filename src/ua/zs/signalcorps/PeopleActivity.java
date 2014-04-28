@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.MenuItem;
+import android.view.*;
 import android.support.v7.widget.SearchView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -127,16 +124,18 @@ public class PeopleActivity extends ActionBarActivity {
         ListView list = (ListView) findViewById(R.id.peopleView);
         SignalCorpsDB dataBase = new SignalCorpsDB(this);
         ArrayList<Person> peopleList = dataBase.getAllPersons(); //dataBase.getPersonBySearchQuery(query);
-        for (int i = 0; i < peopleList.size(); i++) {
-            if(!( peopleList.get(i).getFirstName().toUpperCase().startsWith(search) ||           // Фільтр по імені
-                  peopleList.get(i).getSecondName().toUpperCase().startsWith(search) ||          // Фільтр по прізвищу
-                  peopleList.get(i).getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по батькові
-                  peopleList.get(i).getSecretName().toUpperCase().startsWith(search) ||          // Фільтр по позивному
-                  (peopleList.get(i).getEquipage() != 0 ?
-                          String.valueOf(peopleList.get(i).getEquipage()) :
-                          "").equals(search) )) {                                              // Пошук по екіпажу
-                peopleList.remove(i);
-                i--;
+        if(!query.equals("")) {
+            for (int i = 0; i < peopleList.size(); i++) {
+                if (!(peopleList.get(i).getFirstName().toUpperCase().startsWith(search) ||           // Фільтр по імені
+                        peopleList.get(i).getSecondName().toUpperCase().startsWith(search) ||          // Фільтр по прізвищу
+                        peopleList.get(i).getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по батькові
+                        peopleList.get(i).getSecretName().toUpperCase().startsWith(search) ||          // Фільтр по позивному
+                        (peopleList.get(i).getEquipage() != 0 ?
+                                String.valueOf(peopleList.get(i).getEquipage()) :
+                                "").equals(search))) {                                              // Пошук по екіпажу
+                    peopleList.remove(i);
+                    i--;
+                }
             }
         }
         PersonArrayAdapter adapter = new PersonArrayAdapter(this, peopleList);
@@ -168,9 +167,12 @@ public class PeopleActivity extends ActionBarActivity {
         navigatePeople.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(PeopleActivity.this, PeopleActivity.class);
-                startActivity(intent);
+                //finish();
+                //Intent intent = new Intent(PeopleActivity.this, PeopleActivity.class);
+                //startActivity(intent);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+                setTitle(getResources().getString(R.string.people));
+                searchPerson("");
             }
         });
         Button navigateEquipage = (Button) findViewById(R.id.equipagesButton);

@@ -131,9 +131,10 @@ public class HomeActivity extends ActionBarActivity {
         navigateHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
-                startActivity(intent);
+                //finish();
+                //Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+                //startActivity(intent);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
         Button navigatePeople = (Button) findViewById(R.id.peopleButton);

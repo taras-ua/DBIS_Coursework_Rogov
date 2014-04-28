@@ -106,9 +106,10 @@ public class EquipageActivity extends ActionBarActivity {
         navigateEquipage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(EquipageActivity.this, EquipageActivity.class);
-                startActivity(intent);
+                //finish();
+                //Intent intent = new Intent(EquipageActivity.this, EquipageActivity.class);
+                //startActivity(intent);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
         Button navigateContacts = (Button) findViewById(R.id.contactsButton);

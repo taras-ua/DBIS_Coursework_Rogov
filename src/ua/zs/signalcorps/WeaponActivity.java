@@ -1,13 +1,21 @@
 package ua.zs.signalcorps;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.*;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import ua.zs.elements.Weapon;
+
+import java.util.ArrayList;
 
 public class WeaponActivity extends ActionBarActivity {
 
@@ -19,6 +27,20 @@ public class WeaponActivity extends ActionBarActivity {
         setContentView(R.layout.weapon);
         initiateActionBarIconButton();
         initiateDrawerButtons();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleIntent(getIntent());
+    }
+
+    private void initiateListView() {
+        ListView list = (ListView) findViewById(R.id.weaponView);
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        WeaponArrayAdapter adapter = new WeaponArrayAdapter(this, dataBase.getAllWeapon(), true);
+        list.setAdapter(adapter);
     }
 
     private void initiateActionBarIconButton() {
@@ -51,7 +73,49 @@ public class WeaponActivity extends ActionBarActivity {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.weapon_menu, menu);
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.weapon_menu_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        ((ImageView) searchView.findViewById(R.id.search_button))
+                .setImageResource(R.drawable.ic_action_search);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void searchWeapon(String query) {
+        String search = query.toUpperCase();
+        ListView list = (ListView) findViewById(R.id.weaponView);
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        ArrayList<Weapon> weaponList = dataBase.getAllWeapon(); //dataBase.getPersonBySearchQuery(query);
+        if(!query.equals("")) {
+            for (int i = 0; i < weaponList.size(); i++) {
+                if(!( weaponList.get(i).getOwner().getFirstName().toUpperCase().startsWith(search) ||           // Фільтр по імені
+                        weaponList.get(i).getOwner().getSecondName().toUpperCase().startsWith(search) ||          // Фільтр по прізвищу
+                        weaponList.get(i).getOwner().getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по батькові
+                        weaponList.get(i).getOwner().getSecretName().toUpperCase().startsWith(search) ||          // Фільтр по позивному
+                        weaponList.get(i).getModel().toUpperCase().startsWith(search) ||                        // Фільтр по моделі
+                        (weaponList.get(i).getId() != 0 ?
+                                String.valueOf(weaponList.get(i).getId()) :
+                                "").equals(search) )) {                                              // Пошук по екіпажу
+                    weaponList.remove(i);
+                    i--;
+                }
+            }
+        }
+        WeaponArrayAdapter adapter = new WeaponArrayAdapter(this, weaponList, true);
+        list.setAdapter(adapter);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            setTitle(getResources().getString(R.string.weapon) +
+                    getResources().getString(R.string.search_query) + query);
+            searchWeapon(query);
+        } else {
+            initiateListView();
+        }
     }
 
     @Override
@@ -133,9 +197,12 @@ public class WeaponActivity extends ActionBarActivity {
         navigateWeapon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(WeaponActivity.this, WeaponActivity.class);
-                startActivity(intent);
+                //finish();
+                //Intent intent = new Intent(WeaponActivity.this, WeaponActivity.class);
+                //startActivity(intent);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+                setTitle(getResources().getString(R.string.weapon));
+                searchWeapon("");
             }
         });
     }
