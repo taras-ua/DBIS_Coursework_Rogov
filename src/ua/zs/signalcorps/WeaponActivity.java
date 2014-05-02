@@ -125,6 +125,11 @@ public class WeaponActivity extends ActionBarActivity {
         mDrawerToggle.syncState();
     }
 
+    private void initiateWeaponAdding() {
+        Intent intent = new Intent(WeaponActivity.this, AddWeaponActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -141,6 +146,9 @@ public class WeaponActivity extends ActionBarActivity {
         switch(item.getItemId()) {
             case R.id.logout:
                 userLogout();
+                return true;
+            case R.id.weapon_menu_add:
+                initiateWeaponAdding();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

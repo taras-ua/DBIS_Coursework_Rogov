@@ -124,11 +124,9 @@ public class Person {
     }
 
     public String toString() {
-        return Rank.toString(militaryRank) + " " +
-                secondName + " " +
+        return  secondName + " " +
                 firstName + " " +
-                fathersName +
-                " / " + secretName; // example: "Капітан Коваленко Остап Іванович / ТЕРНОПІЛЬ-10"
+                fathersName; // example: "Коваленко Остап Іванович"
     }
 
 }

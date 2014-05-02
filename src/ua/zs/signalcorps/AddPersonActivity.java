@@ -44,12 +44,17 @@ public class AddPersonActivity extends ActionBarActivity {
                         !password.equals("") && !repeatedPassword.equals("") ) {
                     if(equipage >= 0) {
                         if(password.equals(repeatedPassword)) {
-                            if(!db.addPerson(new Person(secretName, name, fatherName, surname,
-                                                    rank, equipage, password, classified))) {
+                            if(rank <= HomeActivity.user.getRank()) {
+                                if(!db.addPerson(new Person(secretName, name, fatherName, surname,
+                                        rank, equipage, password, classified))) {
+                                    Toast.makeText(AddPersonActivity.this, R.string.exists_error, Toast.LENGTH_LONG)
+                                            .show();
+                                } else {
+                                        AddPersonActivity.this.finish();
+                                }
+                            } else {
                                 Toast.makeText(AddPersonActivity.this, R.string.exists_error, Toast.LENGTH_LONG)
                                         .show();
-                            } else {
-                                AddPersonActivity.this.finish();
                             }
                         } else {
                             Toast.makeText(AddPersonActivity.this, R.string.repassord_error, Toast.LENGTH_LONG)

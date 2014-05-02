@@ -57,5 +57,21 @@
             <meta-data android:name="android.app.searchable"
                        android:resource="@xml/searchable"/>
         </activity>
+        <activity android:name=".AddWeaponActivity"
+                  android:label="@string/add_weapon"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.WeaponActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.WeaponActivity"/>
+        </activity>
+        <activity android:name=".WatchPersonActivity"
+                  android:label="@string/person"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.PeopleActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.PeopleActivity"/>
+        </activity>
     </application>
 </manifest>

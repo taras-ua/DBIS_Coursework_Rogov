@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import ua.zs.elements.*;
+import ua.zs.elements.Classified;
+import ua.zs.elements.Person;
+import ua.zs.elements.Rank;
 
 public class IntroActivity extends Activity {
 
@@ -53,7 +55,7 @@ public class IntroActivity extends Activity {
                     Toast.LENGTH_LONG).show(); // Доступ не надано
         } else {
             HomeActivity.user = dataBase.getPersonBySecretName(login);
-            String authRank = Rank.toString(HomeActivity.user
+            String authRank = Rank.toString(this, HomeActivity.user
                                                         .getRank())
                                                         .toLowerCase();
             Toast.makeText(IntroActivity.this, getResources().getString(R.string.auth_ok) +

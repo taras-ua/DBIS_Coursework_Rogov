@@ -6,25 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import java.sql.Date;
-import java.util.*;
-import ua.zs.elements.*;
+import ua.zs.elements.Equipage;
+import ua.zs.elements.Person;
+import ua.zs.elements.Transport;
+import ua.zs.elements.Weapon;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "SignalCorpsDB";
 
     public static final String TABLE_PERSON = "person";
+    public static final String TABLE_PERSON_ARCHIVE = "person_archive";
     public static final String TABLE_CONTACT = "contact";
     public static final String TABLE_CONTACT_COURIER = "contact_courier";
     public static final String TABLE_EQUIPAGE = "equipage";
+    public static final String TABLE_EQUIPAGE_ARCHIVE = "equipage_archive";
     public static final String TABLE_PACKAGE = "package";
+    public static final String TABLE_PACKAGE_ARCHIVE = "package_archive";
     public static final String TABLE_CONTACT_RADIO = "contact_radio";
     public static final String TABLE_CONTACT_RADIORELATED = "contact_radiorelated";
     public static final String TABLE_CONTACT_SATELLITE = "contact_satellite";
     public static final String TABLE_TRANSPORT = "transport";
+    public static final String TABLE_TRANSPORT_ARCHIVE = "transport_archive";
     public static final String TABLE_WEAPON = "weapon";
+    public static final String TABLE_WEAPON_ARCHIVE = "weapon_archive";
     public static final String TABLE_CONTACT_WIRED = "contact_wired";
 
     public static final String PK_PERSON = "id_person";
@@ -33,6 +42,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     public static final String PK_PACKAGE = "id_package";
     public static final String PK_TRANSPORT = "id_transport";
     public static final String PK_WEAPON = "id_weapon";
+    public static final String PK_ARCHIVE = "id_archive_row";
 
     public static final String KEY_NAME = "name";
     public static final String KEY_FATHER_NAME = "father_name";
@@ -49,6 +59,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     public static final String KEY_MODEL = "model";
     public static final String KEY_LASTTECHWORK = "last_techwork";
     public static final String KEY_NODE = "node";
+    public static final String KEY_ARCHIVED = "archived";
 
     public static final String FK_EQUIPAGE = "fk_equipage";
     public static final String FK_COMMANDER = "fk_commander";
@@ -80,6 +91,11 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_WIRED);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_ARCHIVE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPAGE_ARCHIVE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PACKAGE_ARCHIVE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_ARCHIVE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON_ARCHIVE);
         createTables(db);
     }
 
@@ -113,7 +129,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             }
             Log.i(DATABASE_NAME, ".createDomains > domains creating finished.");
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createDomains.");
+            throw new NullPointerException("Can't reach database in createDomains.");
         }
     }
 
@@ -146,7 +162,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "Is statement <"+CREATE_WIREDCONTACT_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createWiredContactTable.");
+            throw new NullPointerException("Can't reach database in createWiredContactTable.");
         }
     }
 
@@ -156,14 +172,22 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "id_weapon INTEGER PRIMARY KEY, " +
                     "model VARCHAR(15), " +
                     "fk_person VARCHAR(15))";
+            String CREATE_WEAPON_ARCHIVE_TABLE = "CREATE TABLE weapon_archive (" +
+                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_weapon INTEGER, " +
+                    "model VARCHAR(15), " +
+                    "fk_person VARCHAR(15), " +
+                    "archived INT)";
             try {
                 db.compileStatement(CREATE_WEAPON_TABLE).execute();
+                db.compileStatement(CREATE_WEAPON_ARCHIVE_TABLE).execute();
             } catch (Exception e) {
                 Log.e(DATABASE_NAME, ".createWeaponTable threw <" +e.toString()+">. " +
-                        "Is statement <"+CREATE_WEAPON_TABLE+"> valid?");
+                        "Is statement <"+CREATE_WEAPON_TABLE+"> valid? " +
+                        "Is statement <"+CREATE_WEAPON_ARCHIVE_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createWeaponTable.");
+            throw new NullPointerException("Can't reach database in createWeaponTable.");
         }
     }
 
@@ -172,16 +196,25 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             String CREATE_TRANSPORT_TABLE = "CREATE TABLE transport (" +
                     "id_transport INTEGER PRIMARY KEY, " +
                     "model VARCHAR(15), " +
-                    "last_techwork DATE, " +
+                    "last_techwork INT, " +
                     "fk_equipage INTEGER)";
+            String CREATE_TRANSPORT_ARCHIVE_TABLE = "CREATE TABLE transport_archive (" +
+                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_transport INTEGER, " +
+                    "model VARCHAR(15), " +
+                    "last_techwork INT, " +
+                    "fk_equipage INTEGER, " +
+                    "archived INT)";
             try {
                 db.compileStatement(CREATE_TRANSPORT_TABLE).execute();
+                db.compileStatement(CREATE_TRANSPORT_ARCHIVE_TABLE).execute();
             } catch (Exception e) {
                 Log.e(DATABASE_NAME, ".createTransportTable threw <" +e.toString()+">. " +
-                        "Is statement <"+CREATE_TRANSPORT_TABLE+"> valid?");
+                        "Is statement <"+CREATE_TRANSPORT_TABLE+"> valid? " +
+                        "Is statement <"+CREATE_TRANSPORT_ARCHIVE_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createTransportTable.");
+            throw new NullPointerException("Can't reach database in createTransportTable.");
         }
     }
 
@@ -197,7 +230,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "Is statement <"+CREATE_SATELLITECONTACT_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createSatelliteContactTable.");
+            throw new NullPointerException("Can't reach database in createSatelliteContactTable.");
         }
     }
 
@@ -213,7 +246,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "Is statement <"+CREATE_RADIORELATEDCONTACT_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createRadioRelatedContactTable.");
+            throw new NullPointerException("Can't reach database in createRadioRelatedContactTable.");
         }
     }
 
@@ -229,7 +262,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "Is statement <"+CREATE_RADIOCONTACT_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createRadioContactTable.");
+            throw new NullPointerException("Can't reach database in createRadioContactTable.");
         }
     }
 
@@ -239,14 +272,22 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "id_package INTEGER PRIMARY KEY, " +
                     "fk_contact INTEGER, " +
                     "classified CLASSIFIED)";
+            String CREATE_PACKAGE_ARCHIVE_TABLE = "CREATE TABLE package_archive (" +
+                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_package INTEGER, " +
+                    "fk_contact INTEGER, " +
+                    "classified CLASSIFIED, " +
+                    "archived INT)";
             try {
                 db.compileStatement(CREATE_PACKAGE_TABLE).execute();
+                db.compileStatement(CREATE_PACKAGE_ARCHIVE_TABLE).execute();
             } catch (Exception e) {
                 Log.e(DATABASE_NAME, ".createPackageTable threw <" +e.toString()+">. " +
-                        "Is statement <"+CREATE_PACKAGE_TABLE+"> valid?");
+                        "Is statement <"+CREATE_PACKAGE_TABLE+"> valid? " +
+                        "Is statement <"+CREATE_PACKAGE_ARCHIVE_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createPackageTable.");
+            throw new NullPointerException("Can't reach database in createPackageTable.");
         }
     }
 
@@ -255,14 +296,21 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             String CREATE_EQUIPAGE_TABLE = "CREATE TABLE equipage (" +
                     "id_equipage INTEGER PRIMARY KEY, " +
                     "fk_commander VARCHAR(15))";
+            String CREATE_EQUIPAGE_ARCHIVE_TABLE = "CREATE TABLE equipage_archive (" +
+                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_equipage INTEGER, " +
+                    "fk_commander VARCHAR(15), " +
+                    "archived INT)";
             try {
                 db.compileStatement(CREATE_EQUIPAGE_TABLE).execute();
+                db.compileStatement(CREATE_EQUIPAGE_ARCHIVE_TABLE).execute();
             } catch (Exception e) {
                 Log.e(DATABASE_NAME, ".createEquipageTable threw <" +e.toString()+">. " +
-                        "Is statement <"+CREATE_EQUIPAGE_TABLE+"> valid?");
+                        "Is statement <"+CREATE_EQUIPAGE_TABLE+"> valid? " +
+                        "Is statement <"+CREATE_EQUIPAGE_ARCHIVE_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createEquipageTable.");
+            throw new NullPointerException("Can't reach database in createEquipageTable.");
         }
     }
 
@@ -278,7 +326,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "Is statement <"+CREATE_COURIERCONTACT_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createCourierContactTable.");
+            throw new NullPointerException("Can't reach database in createCourierContactTable.");
         }
     }
 
@@ -287,8 +335,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             String CREATE_CONTACT_TABLE = "CREATE TABLE contact (" +
                     "id_contact INTEGER PRIMARY KEY, " +
                     "fk_equipage INTEGER, " +
-                    "started DATE, " +
-                    "finished DATE)";
+                    "started INT, " +
+                    "finished INT)";
             try {
                 db.compileStatement(CREATE_CONTACT_TABLE).execute();
             } catch (Exception e) {
@@ -296,7 +344,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "Is statement <"+CREATE_CONTACT_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createContactTable.");
+            throw new NullPointerException("Can't reach database in createContactTable.");
         }
     }
 
@@ -311,14 +359,27 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "fk_equipage INTEGER, " +
                     "password VARCHAR(30), " +
                     "classified CLASSIFIED)";
+            String CREATE_PERSON_ARCHIVE_TABLE = "CREATE TABLE person_archive (" +
+                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_person VARCHAR(15), " +
+                    "name VARCHAR(30), " +
+                    "father_name VARCHAR(30), " +
+                    "family_name VARCHAR(30), " +
+                    "rank MILITARY_RANK, " +
+                    "fk_equipage INTEGER, " +
+                    "password VARCHAR(30), " +
+                    "classified CLASSIFIED, " +
+                    "archived INT)";
             try {
                 db.compileStatement(CREATE_PERSON_TABLE).execute();
+                db.compileStatement(CREATE_PERSON_ARCHIVE_TABLE).execute();
             } catch (Exception e) {
                 Log.e(DATABASE_NAME, ".createPersonTable threw <" +e.toString()+">. " +
-                        "Is statement <"+CREATE_PERSON_TABLE+"> valid?");
+                        "Is statement <"+CREATE_PERSON_TABLE+"> valid? " +
+                        "Is statement <"+CREATE_PERSON_ARCHIVE_TABLE+"> valid?");
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in createPersonTable.");
+            throw new NullPointerException("Can't reach database in createPersonTable.");
         }
     }
 
@@ -327,7 +388,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     public boolean addPerson(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         if(db != null) {
-            if(this.getPersonBySecretName(person.getSecretName()) == null) {
+            if(this.getPersonBySecretName(person.getSecretName()) == null &&
+                    this.getPersonFromArchive(person.getSecretName()).size() == 0) {
                 ContentValues values = new ContentValues();
                 values.put(PK_PERSON, person.getSecretName());
                 values.put(KEY_NAME, person.getFirstName());
@@ -349,8 +411,40 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 return false; // This ID already exists
             }
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in addPersons.");
+            throw new NullPointerException("Can't reach database in addPersons.");
         }
+    }
+
+    public int deletePerson(String secreteName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Person row = this.getPersonBySecretName(secreteName);
+            if(row != null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_ARCHIVE, new Date().getTime());
+                values.put(PK_PERSON, row.getSecretName());
+                values.put(KEY_NAME, row.getFirstName());
+                values.put(KEY_FATHER_NAME, row.getFathersName());
+                values.put(KEY_FAMILY_NAME, row.getSecondName());
+                values.put(KEY_RANK, row.getRank());
+                values.put(FK_EQUIPAGE, row.getEquipage());
+                values.put(KEY_PASSWORD, row.getPersonalPassword());
+                values.put(KEY_CLASSIFIED, row.getClassified());
+                try {
+                    db.insert(TABLE_PERSON_ARCHIVE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".deletePerson.insert threw <" + e.toString() + ">.");
+                }
+                result = db.delete(TABLE_PERSON, PK_PERSON + "='" + secreteName+"'", null);
+            } else {
+                throw new NullPointerException("Can't delete person <" + secreteName + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in deletePerson.");
+        }
+        return result;
     }
 
     public ArrayList<Person> getAllPersons() {
@@ -360,14 +454,14 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         if(db != null) {
             cursor = db.query(TABLE_PERSON, new String[] { "*" }, null, null, null, null, KEY_RANK);
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
+            throw new NullPointerException("Can't reach database in getAllPersons.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
         } else {
             return null;
         }
-        do {
+        if(cursor.getCount() > 0) do {
             personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
                                        cursor.getString(3), cursor.getInt(4),
                                        cursor.getInt(5), cursor.getString(6),
@@ -383,12 +477,12 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         if(db != null) {
             cursor = db.query(TABLE_PERSON, new String[] {PK_PERSON, KEY_PASSWORD }, null, null, null, null, null);
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in checkAuthInformation.");
+            throw new NullPointerException("Can't reach database in checkAuthInformation.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
         } else {
-            throw new NullPointerException("Null-cursor of SQLDateBase.query in checkAuthInformation.");
+            throw new NullPointerException("Null-cursor of database.query in checkAuthInformation.");
         }
         do {
             if(login.equals(cursor.getString(0)) && password.equals(cursor.getString(1))) {
@@ -425,7 +519,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     null, // having
                     KEY_RANK); // orderBy
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
+            throw new NullPointerException("Can't reach database in getAllPersons.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -453,7 +547,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     null, // having
                     null); // orderBy
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
+            throw new NullPointerException("Can't reach database in getPersonBySecretName.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -469,6 +563,35 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return null;
     }
 
+    public ArrayList<Person> getPersonFromArchive(String secretName) {
+        ArrayList<Person> personsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PERSON_ARCHIVE, new String[] { "*" },
+                    PK_PERSON + " = ?", // where
+                    new String[] { secretName }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    KEY_ARCHIVED + " DESC"); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getPersonFromArchive.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0)  do {
+            personsList.add(new Person(cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getInt(5),
+                    cursor.getInt(6), cursor.getString(7),
+                    cursor.getInt(8)));
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return personsList;
+    }
+
     // ###################################### WORK WITH EQUIPAGE TABLE ######################################
 
     public ArrayList<Equipage> getAllEquipages() {
@@ -478,7 +601,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         if(db != null) {
             cursor = db.query(TABLE_EQUIPAGE, new String[] { "*" }, null, null, null, null, PK_EQUIPAGE);
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
+            throw new NullPointerException("Can't reach database in getAllEquipages.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -503,7 +626,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     null, // having
                     null); // orderBy
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
+            throw new NullPointerException("Can't reach database in getEquipageById.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -525,7 +648,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         if(db != null) {
             cursor = db.query(TABLE_TRANSPORT, new String[] { "*" }, null, null, null, null, KEY_MODEL);
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
+            throw new NullPointerException("Can't reach database in getAllTransport.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -533,7 +656,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             return null;
         }
         if(cursor.getCount() > 0) do {
-            transportList.add(new Transport(cursor.getInt(0), cursor.getString(1), Date.valueOf(cursor.getString(2)),
+            transportList.add(new Transport(cursor.getInt(0), cursor.getString(1), new Date(Integer.valueOf(cursor.getString(2))),
                     getEquipageById(cursor.getInt(3))));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
@@ -542,6 +665,57 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
 
     // ###################################### WORK WITH WEAPON TABLE ######################################
 
+    public boolean addWeapon(Weapon weapon) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) {
+            if(this.getWeaponById(weapon.getId()) == null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_WEAPON, weapon.getId());
+                values.put(KEY_MODEL, weapon.getModel());
+                values.put(FK_PERSON, weapon.getOwner().getSecretName());
+                try {
+                    db.insert(TABLE_WEAPON, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".addWeapon.input threw <" + e.toString() + ">.");
+                }
+                db.close();
+                return true; // Inserted successfully
+            } else {
+                db.close();
+                return false; // This ID already exists
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in addWeapon.");
+        }
+    }
+
+    public int deleteWeapon(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Weapon row = this.getWeaponById(id);
+            if(row != null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_ARCHIVE, new Date().getTime());
+                values.put(PK_WEAPON, row.getId());
+                values.put(KEY_MODEL, row.getModel());
+                values.put(FK_PERSON, row.getOwner().getSecretName());
+                try {
+                    db.insert(TABLE_WEAPON_ARCHIVE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".deleteWeapon.insert threw <" + e.toString() + ">.");
+                }
+                result = db.delete(TABLE_WEAPON, PK_WEAPON + "=" + String.valueOf(id), null);
+            } else {
+                throw new NullPointerException("Can't delete weapon <" + String.valueOf(id) + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in deletePerson.");
+        }
+        return result;
+    }
+
     public ArrayList<Weapon> getAllWeapon() {
         ArrayList<Weapon> weaponList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -549,7 +723,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         if(db != null) {
             cursor = db.query(TABLE_WEAPON, new String[] { "*" }, null, null, null, null, KEY_MODEL);
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getAllPersons.");
+            throw new NullPointerException("Can't reach database in getAllWeapon.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -557,8 +731,11 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             return null;
         }
         if(cursor.getCount() > 0) do {
-            weaponList.add(new Weapon(cursor.getInt(0), cursor.getString(1),
-                    getPersonBySecretName(cursor.getString(2))));
+            Person owner = getPersonBySecretName(cursor.getString(2));
+            if(owner == null) {
+                owner = getPersonFromArchive(cursor.getString(2)).get(0);
+            }
+            weaponList.add(new Weapon(cursor.getInt(0), cursor.getString(1), owner));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
         return weaponList;
@@ -576,7 +753,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     null, // having
                     KEY_MODEL); // orderBy
         } else {
-            throw new NullPointerException("Can't reach SQLDateBase in getPersonBySecretName.");
+            throw new NullPointerException("Can't reach database in getWeaponOfPerson.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -584,11 +761,42 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             return null;
         }
         if(cursor.getCount() > 0) do {
-            weaponList.add(new Weapon(cursor.getInt(0), cursor.getString(1),
-                    getPersonBySecretName(cursor.getString(2))));
+            Person owner = getPersonBySecretName(cursor.getString(2));
+            if(owner == null) {
+                owner = getPersonFromArchive(cursor.getString(2)).get(0);
+            }
+            weaponList.add(new Weapon(cursor.getInt(0), cursor.getString(1), owner));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
         return weaponList;
+    }
+
+    public Weapon getWeaponById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_WEAPON, new String[] { "*" },
+                    PK_WEAPON + " = ?", // where
+                    new String[] { String.valueOf(id) }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    null); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getWeaponById.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) {
+            Person owner = getPersonBySecretName(cursor.getString(2));
+            if(owner == null) {
+                owner = getPersonFromArchive(cursor.getString(2)).get(0);
+            }
+            return new Weapon(cursor.getInt(0), cursor.getString(1), owner);
+        }
+        return null;
     }
 
 }

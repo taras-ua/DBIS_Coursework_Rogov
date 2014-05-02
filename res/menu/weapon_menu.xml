@@ -6,7 +6,7 @@
           android:title="@string/action_search"
           ua.zs.signalcorps:showAsAction="ifRoom"
           ua.zs.signalcorps:actionViewClass="android.support.v7.widget.SearchView"/>
-    <item android:id="@+id/people_menu_add"
+    <item android:id="@+id/weapon_menu_add"
           android:icon="@drawable/ic_action_new"
           android:title="@string/action_search"
           ua.zs.signalcorps:showAsAction="ifRoom"/>

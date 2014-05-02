@@ -7,10 +7,13 @@
     <string name="auth_error">Доступ не надано</string>
     <string name="repassord_error">Паролі не співпадають</string>
     <string name="equipage_error">Номер екіпажу повинен бути більшим від 0</string>
+    <string name="id_error">Ідентифікатор повинен бути більшим від 0</string>
     <string name="needed_error">Потрібно заповнити всі обов’язкові поля</string>
     <string name="exists_error">Такий позивний уже існує</string>
+    <string name="id_exists_error">Такий ідентифікатор вже існує</string>
     <string name="auth_ok">Бажаю здоров’я, товаришу</string>
     <string name="people">Особовий склад</string>
+    <string name="person">Особова справа</string>
     <string name="rank">Військове звання</string>
     <string name="classified">Форма допуску</string>
     <string name="drawer_open">open</string>
@@ -20,6 +23,7 @@
     <string name="action_search">Пошук…</string>
     <string name="action_add_person">Додати особу</string>
     <string name="add_person">Додавання особової справи</string>
+    <string name="add_weapon">Додавання одиниці зброї</string>
     <string name="star_hint">* Обов’язкові до заповнення поля</string>
     <string name="name">Ім’я</string>
     <string name="surname">Прізвище</string>
@@ -45,7 +49,7 @@
     <string name="GENERAL_MAJOR">Генерал-майор</string>
     <string name="GENERAL_LIEUTENANT">Генерал-лейтенант</string>
     <string name="GENERAL_POLKOVNYK">Генерал-полковник</string>
-    <string name="GENERAL_OF_ARMY">Генерал Армії України</string>
+    <string name="GENERAL_OF_ARMY">Генерал Армії</string>
     <string name="UNCLASSIFIED">Без допуску</string>
     <string name="CONFIDENTIAL">Форма 3</string>
     <string name="SECRET">Форма 2</string>
@@ -62,5 +66,15 @@
     <string name="no_equipage">Не приписаний до екіпажу</string>
     <string name="search_query"> / фільтр: </string>
     <string name="number_sym"> №</string>
-    <string name="owner">Власник: </string>
+    <string name="owner">Власник:</string>
+    <string name="no_permission">Ви не можете оперувати інформацією військових вищого звання.</string>
+    <string name="login_name_owner">Позивний власника</string>
+    <string name="model">Модель</string>
+    <string name="id">Ідентифікатор</string>
+    <string name="owner_not_found">Введеного позивного немає в базі</string>
+    <string name="delete_person">Звільнити</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+    <string name="confirmation">Підтвердження</string>
+    <string name="confirmation_message">Ви дійсно бажаєте архівувати цей запис?</string>
 </resources>

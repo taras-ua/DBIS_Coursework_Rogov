@@ -8,12 +8,11 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.view.*;
 import android.support.v7.widget.SearchView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import ua.zs.elements.*;
+import android.view.*;
+import android.widget.*;
+import ua.zs.elements.Person;
+
 import java.util.ArrayList;
 
 public class PeopleActivity extends ActionBarActivity {
@@ -143,6 +142,21 @@ public class PeopleActivity extends ActionBarActivity {
     }
 
     private void handleIntent(Intent intent) {
+        ListView list = (ListView) findViewById(R.id.peopleView);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String chosenUser = ((TextView) view.findViewById(R.id.secretNameView)).getText().toString();
+                Intent watch;
+                if(chosenUser.equals(HomeActivity.user.getSecretName())) {
+                    watch = new Intent(PeopleActivity.this, HomeActivity.class);
+                } else {
+                    watch = new Intent(PeopleActivity.this, WatchPersonActivity.class);
+                    watch.putExtra("user", ((TextView) view.findViewById(R.id.secretNameView)).getText().toString());
+                }
+                startActivity(watch);
+            }
+        });
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             setTitle(getResources().getString(R.string.people) +

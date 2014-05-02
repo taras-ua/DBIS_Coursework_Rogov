@@ -1,5 +1,6 @@
 package ua.zs.elements;
 
+import android.content.Context;
 import ua.zs.signalcorps.R;
 
 public class Rank {
@@ -51,28 +52,28 @@ public class Rank {
         return 0;
     }
 
-    public static String toString(int code) {
+    public static String toString(Context c, int code) {
         switch(code) {
-            case CIVILIAN: return "Цивільний";
-            case SOLDIER: return "Солдат";
-            case SENIOR_SOLDIER: return "Старший солдат";
-            case JUNIOR_SERGEANT: return "Молодший сержант";
-            case SERGEANT: return "Сержант";
-            case SENIOR_SERGEANT: return "Старший сержант";
-            case STARSHYNA: return "Старшина";
-            case PRAPORSHCHYK: return "Прапорщик";
-            case SENIOR_PRAPORSHCHYK: return "Старший прапорщик";
-            case JUNIOR_LIEUTENANT: return "Молодший лейтенант";
-            case LIEUTENANT: return "Лейтенант";
-            case SENIOR_LIEUTENANT: return "Старший лейтенант";
-            case CAPTAIN: return "Капітан";
-            case MAJOR: return "Майор";
-            case PIDPOLKOVNYK: return "Підполковник";
-            case POLKOVNYK: return "Полковник";
-            case GENERAL_MAJOR: return "Генерал-майор";
-            case GENERAL_LIEUTENANT: return "Генерал-лейтенант";
-            case GENERAL_POLKOVNYK: return "Генерал-полковник";
-            case GENERAL_OF_ARMY: return "Генерал Армії України";
+            case CIVILIAN: return c.getResources().getString(R.string.CIVILIAN);
+            case SOLDIER: return c.getResources().getString(R.string.SOLDIER);
+            case SENIOR_SOLDIER: return c.getResources().getString(R.string.SENIOR_SOLDIER);
+            case JUNIOR_SERGEANT: return c.getResources().getString(R.string.JUNIOR_SERGEANT);
+            case SERGEANT: return c.getResources().getString(R.string.SERGEANT);
+            case SENIOR_SERGEANT: return c.getResources().getString(R.string.SENIOR_SERGEANT);
+            case STARSHYNA: return c.getResources().getString(R.string.STARSHYNA);
+            case PRAPORSHCHYK: return c.getResources().getString(R.string.PRAPORSHCHYK);
+            case SENIOR_PRAPORSHCHYK: return c.getResources().getString(R.string.SENIOR_PRAPORSHCHYK);
+            case JUNIOR_LIEUTENANT: return c.getResources().getString(R.string.JUNIOR_LIEUTENANT);
+            case LIEUTENANT: return c.getResources().getString(R.string.LIEUTENANT);
+            case SENIOR_LIEUTENANT: return c.getResources().getString(R.string.SENIOR_LIEUTENANT);
+            case CAPTAIN: return c.getResources().getString(R.string.CAPTAIN);
+            case MAJOR: return c.getResources().getString(R.string.MAJOR);
+            case PIDPOLKOVNYK: return c.getResources().getString(R.string.PIDPOLKOVNYK);
+            case POLKOVNYK: return c.getResources().getString(R.string.POLKOVNYK);
+            case GENERAL_MAJOR: return c.getResources().getString(R.string.GENERAL_MAJOR);
+            case GENERAL_LIEUTENANT: return c.getResources().getString(R.string.GENERAL_LIEUTENANT);
+            case GENERAL_POLKOVNYK: return c.getResources().getString(R.string.GENERAL_POLKOVNYK);
+            case GENERAL_OF_ARMY: return c.getResources().getString(R.string.GENERAL_OF_ARMY);
         }
         return null;
     }

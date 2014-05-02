@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import ua.zs.elements.*;
+import ua.zs.elements.Person;
+import ua.zs.elements.Rank;
+import ua.zs.elements.Weapon;
+
 import java.util.List;
 
 public class WeaponArrayAdapter extends ArrayAdapter<Weapon> {
@@ -30,14 +33,16 @@ public class WeaponArrayAdapter extends ArrayAdapter<Weapon> {
         TextView model = (TextView) rowView.findViewById(R.id.modelView);
         TextView id = (TextView) rowView.findViewById(R.id.numberView);
         TextView owner = (TextView) rowView.findViewById(R.id.ownerView);
-        model.setText(list.get(position).getModel());
+        model.setText(list.get(position).getModel() + " ");
         id.setText(context.getString(R.string.number_sym) + String.valueOf(list.get(position).getId()));
-        owner.setText(showOwner ? ownerText(list.get(position).getOwner()) : "");
+        owner.setText(ownerText(list.get(position).getOwner()));
+        owner.setVisibility(showOwner ? View.VISIBLE : View.GONE);
         return rowView;
     }
     
     private String ownerText(Person person) {
-        return context.getString(R.string.owner) +
+        return context.getString(R.string.owner) + " " +
+                             Rank.toString(context, person.getRank()).toLowerCase() + " " +
                              person.getSecondName() + " " +
                              person.getFirstName() + " " +
                              person.getFathersName();

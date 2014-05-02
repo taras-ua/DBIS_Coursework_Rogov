@@ -36,7 +36,7 @@ public class HomeActivity extends ActionBarActivity {
         TextView secret = (TextView) findViewById(R.id.secretNameView);
         Button equipage = (Button) findViewById(R.id.equipageButton);
         rankImage.setImageResource(Rank.toImage(user.getRank()));
-        rankText.setText(Rank.toString(user.getRank()));
+        rankText.setText(Rank.toString(this, user.getRank()));
         name.setText(user.getSecondName() + " " +
                 user.getFirstName() + " " +
                 user.getFathersName());
