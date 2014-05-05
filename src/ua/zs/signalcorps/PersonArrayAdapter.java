@@ -7,18 +7,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import ua.zs.elements.*;
+import ua.zs.elements.Person;
+import ua.zs.elements.Rank;
+
 import java.util.List;
 
 public class PersonArrayAdapter extends ArrayAdapter<Person> {
 
     private List<Person> list;
     private Context context;
+    private boolean showEquipage;
 
-    public PersonArrayAdapter(Context context, List<Person> list) {
+    public PersonArrayAdapter(Context context, List<Person> list, boolean showEquipage) {
         super(context, R.layout.list_person, list);
         this.list = list;
         this.context = context;
+        this.showEquipage = showEquipage;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class PersonArrayAdapter extends ArrayAdapter<Person> {
                             context.getString(R.string.equipage_id) +
                             String.valueOf(list.get(position).getEquipage()) :
                             "");
+        equipage.setVisibility(showEquipage ? View.VISIBLE : View.GONE);
         return rowView;
     }
 

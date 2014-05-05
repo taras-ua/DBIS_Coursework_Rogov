@@ -31,7 +31,6 @@ public class AddWeaponActivity extends Activity {
                 String idText = String.valueOf(((EditText) findViewById(R.id.idText)).getText());
                 int id = Integer.valueOf( !idText.equals("") ? idText : "0" );
                 String model = String.valueOf(((EditText) findViewById(R.id.modelText)).getText());
-
                 SignalCorpsDB db = new SignalCorpsDB(AddWeaponActivity.this);
                 if( !idText.equals("") && !model.equals("") && !secretName.equals("")) {
                     if(id >= 0) {

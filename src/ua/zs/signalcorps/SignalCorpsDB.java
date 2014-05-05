@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 13;
     private static final String DATABASE_NAME = "SignalCorpsDB";
 
     public static final String TABLE_PERSON = "person";
@@ -75,6 +75,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         Log.i(DATABASE_NAME, ".onCreate > DB creating started.");
         createDomains(db);
         createTables(db);
+        //createTriggers(db);
     }
 
     @Override
@@ -97,6 +98,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_ARCHIVE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON_ARCHIVE);
         createTables(db);
+        //createTriggers(db);
     }
 
     // ###################################### DOMAINS CREATION ######################################
@@ -132,6 +134,25 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             throw new NullPointerException("Can't reach database in createDomains.");
         }
     }
+
+    // ###################################### TRIGGERS CREATION ######################################
+
+    /*private void createTriggers(SQLiteDatabase db) {
+        if(db != null) {
+            String CREATE_ON_NEW_PERSON_TRIGGER = "CREATE TRIGGER IF NOT EXISTS insert_person AFTER INSERT ON " +
+                    TABLE_PERSON + " WHEN new." + FK_EQUIPAGE + " > 0 BEGIN CASE WHEN (SELECT COUNT(*) FROM " +
+                    TABLE_EQUIPAGE + " WHERE " + PK_EQUIPAGE + " = new." + FK_EQUIPAGE + ") = 0 THEN INSERT INTO " +
+                    TABLE_EQUIPAGE + " VALUES (new." + FK_EQUIPAGE + ", new." + PK_PERSON + "); END;";
+            try {
+                db.compileStatement(CREATE_ON_NEW_PERSON_TRIGGER).execute();
+            } catch (Exception e) {
+                Log.e(DATABASE_NAME, ".createTriggers threw <" +e.toString()+">. " +
+                        "Is statement <"+CREATE_ON_NEW_PERSON_TRIGGER+"> valid?");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in createTriggers.");
+        }
+    }*/
 
     // ###################################### TABLES CREATION ######################################
 
@@ -173,7 +194,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "model VARCHAR(15), " +
                     "fk_person VARCHAR(15))";
             String CREATE_WEAPON_ARCHIVE_TABLE = "CREATE TABLE weapon_archive (" +
-                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_weapon INTEGER, " +
                     "model VARCHAR(15), " +
                     "fk_person VARCHAR(15), " +
@@ -199,7 +220,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "last_techwork INT, " +
                     "fk_equipage INTEGER)";
             String CREATE_TRANSPORT_ARCHIVE_TABLE = "CREATE TABLE transport_archive (" +
-                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_transport INTEGER, " +
                     "model VARCHAR(15), " +
                     "last_techwork INT, " +
@@ -273,7 +294,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "fk_contact INTEGER, " +
                     "classified CLASSIFIED)";
             String CREATE_PACKAGE_ARCHIVE_TABLE = "CREATE TABLE package_archive (" +
-                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_package INTEGER, " +
                     "fk_contact INTEGER, " +
                     "classified CLASSIFIED, " +
@@ -297,7 +318,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "id_equipage INTEGER PRIMARY KEY, " +
                     "fk_commander VARCHAR(15))";
             String CREATE_EQUIPAGE_ARCHIVE_TABLE = "CREATE TABLE equipage_archive (" +
-                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_equipage INTEGER, " +
                     "fk_commander VARCHAR(15), " +
                     "archived INT)";
@@ -360,7 +381,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "password VARCHAR(30), " +
                     "classified CLASSIFIED)";
             String CREATE_PERSON_ARCHIVE_TABLE = "CREATE TABLE person_archive (" +
-                    "id_archive_row INTEGER PRIMARY KEY, " +
+                    "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_person VARCHAR(15), " +
                     "name VARCHAR(30), " +
                     "father_name VARCHAR(30), " +
@@ -388,27 +409,90 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     public boolean addPerson(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         if(db != null) {
+            ContentValues values = new ContentValues();
+            values.put(PK_PERSON, person.getSecretName());
+            values.put(KEY_NAME, person.getFirstName());
+            values.put(KEY_FATHER_NAME, person.getFathersName());
+            values.put(KEY_FAMILY_NAME, person.getSecondName());
+            values.put(KEY_RANK, person.getRank());
+            values.put(FK_EQUIPAGE, person.getEquipage());
+            values.put(KEY_PASSWORD, person.getPersonalPassword());
+            values.put(KEY_CLASSIFIED, person.getClassified());
+            ArrayList<Person> archive = this.getPersonFromArchive(person.getSecretName());
             if(this.getPersonBySecretName(person.getSecretName()) == null &&
-                    this.getPersonFromArchive(person.getSecretName()).size() == 0) {
-                ContentValues values = new ContentValues();
-                values.put(PK_PERSON, person.getSecretName());
-                values.put(KEY_NAME, person.getFirstName());
-                values.put(KEY_FATHER_NAME, person.getFathersName());
-                values.put(KEY_FAMILY_NAME, person.getSecondName());
-                values.put(KEY_RANK, person.getRank());
-                values.put(FK_EQUIPAGE, person.getEquipage());
-                values.put(KEY_PASSWORD, person.getPersonalPassword());
-                values.put(KEY_CLASSIFIED, person.getClassified());
+                    archive.size() == 0) {
+                try {
+                    db.insert(TABLE_PERSON, null, values);
+                    if(person.getEquipage() > 0) {
+                        if(this.getEquipageById(person.getEquipage()) != null) {
+                            if(this.getEquipageById(person.getEquipage()).getCommander().getRank() < person.getRank()) {
+                                this.deleteEquipageForOneMoment(person.getEquipage());
+                                this.addEquipageWithNewPerson(new Equipage(person.getEquipage(), person));
+                            }
+                        } else {
+                            this.addEquipageWithNewPerson(new Equipage(person.getEquipage(), person));
+                        }
+                    } // New equipage commander in case of having the highest rank
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".addPerson.insert threw <" + e.toString() + ">.");
+                }
+                db.close();
+                return true; // Inserted successfully
+            } else {
+                if(archive.size() > 0) {
+                    if(archive.get(0).getFirstName().equals(person.getFirstName()) &&
+                            archive.get(0).getSecondName().equals(person.getSecondName()) &&
+                            archive.get(0).getFathersName().equals(person.getFathersName())) {
+                        try {
+                            db.insert(TABLE_PERSON, null, values); // Return person from archive
+                            if(person.getEquipage() > 0) {
+                                if(this.getEquipageById(person.getEquipage()) != null) {
+                                    if(this.getEquipageById(person.getEquipage()).getCommander().getRank() < person.getRank()) {
+                                        this.deleteEquipageForOneMoment(person.getEquipage());
+                                        this.addEquipageWithNewPerson(new Equipage(person.getEquipage(), person));
+                                    }
+                                } else {
+                                    this.addEquipageWithNewPerson(new Equipage(person.getEquipage(), person));
+                                }
+                            } // New equipage commander in case of having the highest rank
+                        } catch (Exception e) {
+                            Log.e(DATABASE_NAME, ".addPerson.insert threw <" + e.toString() + ">.");
+                        }
+                        db.close();
+                        return true;
+                    }
+                }
+                db.close();
+                return false; // This ID already exists
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in addPersons.");
+        }
+    }
+
+    public boolean addEquipageCommander(Person person) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) {
+            ContentValues values = new ContentValues();
+            values.put(PK_PERSON, person.getSecretName());
+            values.put(KEY_NAME, person.getFirstName());
+            values.put(KEY_FATHER_NAME, person.getFathersName());
+            values.put(KEY_FAMILY_NAME, person.getSecondName());
+            values.put(KEY_RANK, person.getRank());
+            values.put(FK_EQUIPAGE, person.getEquipage());
+            values.put(KEY_PASSWORD, person.getPersonalPassword());
+            values.put(KEY_CLASSIFIED, person.getClassified());
+            if(this.getPersonBySecretName(person.getSecretName()) == null) {
                 try {
                     db.insert(TABLE_PERSON, null, values);
                 } catch (Exception e) {
-                    Log.e(DATABASE_NAME, ".addPerson.input threw <" + e.toString() + ">.");
+                    Log.e(DATABASE_NAME, ".addPerson.insert threw <" + e.toString() + ">.");
                 }
                 db.close();
                 return true; // Inserted successfully
             } else {
                 db.close();
-                return false; // This ID already exists
+                return false;
             }
         } else {
             throw new NullPointerException("Can't reach database in addPersons.");
@@ -422,7 +506,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             Person row = this.getPersonBySecretName(secreteName);
             if(row != null) {
                 ContentValues values = new ContentValues();
-                values.put(PK_ARCHIVE, new Date().getTime());
+                values.put(KEY_ARCHIVED, new Date().getTime());
                 values.put(PK_PERSON, row.getSecretName());
                 values.put(KEY_NAME, row.getFirstName());
                 values.put(KEY_FATHER_NAME, row.getFathersName());
@@ -432,10 +516,22 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 values.put(KEY_PASSWORD, row.getPersonalPassword());
                 values.put(KEY_CLASSIFIED, row.getClassified());
                 try {
+                    if(row.getEquipage() > 0 &&
+                            this.getEquipageById(row.getEquipage()).getCommander().getSecretName()
+                                    .equals(row.getSecretName())) {
+                        ArrayList<Person> equipagePeople = this.getPersonsFromEquipage(row.getEquipage());
+                        this.deleteEquipageForOneMoment(row.getEquipage());
+                        if(equipagePeople.size() > 1) {
+                            Person newCommander = equipagePeople.get(1).getSecretName().equals(row.getSecretName()) ?
+                                    equipagePeople.get(0) : equipagePeople.get(1);
+                            this.addEquipage(new Equipage(row.getEquipage(), newCommander));
+                        }
+                    } // New equipage commander
                     db.insert(TABLE_PERSON_ARCHIVE, null, values);
                 } catch (Exception e) {
                     Log.e(DATABASE_NAME, ".deletePerson.insert threw <" + e.toString() + ">.");
                 }
+                db = this.getWritableDatabase();
                 result = db.delete(TABLE_PERSON, PK_PERSON + "='" + secreteName+"'", null);
             } else {
                 throw new NullPointerException("Can't delete person <" + secreteName + ">. " +
@@ -452,7 +548,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
         if(db != null) {
-            cursor = db.query(TABLE_PERSON, new String[] { "*" }, null, null, null, null, KEY_RANK);
+            cursor = db.query(TABLE_PERSON, new String[] { "*" }, null, null, null, null, KEY_RANK + " DESC");
         } else {
             throw new NullPointerException("Can't reach database in getAllPersons.");
         }
@@ -517,9 +613,39 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     null, // params
                     null, // groupBy
                     null, // having
-                    KEY_RANK); // orderBy
+                    KEY_RANK + " DESC"); // orderBy
         } else {
             throw new NullPointerException("Can't reach database in getAllPersons.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) do {
+            personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3), cursor.getInt(4),
+                    cursor.getInt(5), cursor.getString(6),
+                    cursor.getInt(7)));
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return personsList;
+    }
+
+    public ArrayList<Person> getPersonsFromEquipage(int id) {
+        String searchString = String.valueOf(id);
+        ArrayList<Person> personsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PERSON, new String[] { "*" },
+                    FK_EQUIPAGE + "=" + searchString, // where
+                    null, // params
+                    null, // groupBy
+                    null, // having
+                    KEY_RANK + " DESC"); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getPersonsFromEquipage.");
         }
         if (cursor != null) {
             cursor.moveToFirst();
@@ -593,6 +719,115 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
     }
 
     // ###################################### WORK WITH EQUIPAGE TABLE ######################################
+
+    public boolean addEquipage(Equipage equipage) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) {
+            if(this.getEquipageById(equipage.getId()) == null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_EQUIPAGE, equipage.getId());
+                values.put(FK_COMMANDER, equipage.getCommander().getSecretName());
+                try {
+                    db.insert(TABLE_EQUIPAGE, null, values);
+                    Person person = getPersonBySecretName(equipage.getCommander().getSecretName());
+                    deletePerson(person.getSecretName());
+                    person.assignToEquipage(equipage.getId());
+                    addEquipageCommander(person);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".addEquipage.input threw <" + e.toString() + ">.");
+                }
+                db.close();
+                return true; // Inserted successfully
+            } else {
+                db.close();
+                return false; // This ID already exists
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in addEquipage.");
+        }
+    }
+
+    public boolean addEquipageWithNewPerson(Equipage equipage) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) {
+            if(this.getEquipageById(equipage.getId()) == null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_EQUIPAGE, equipage.getId());
+                values.put(FK_COMMANDER, equipage.getCommander().getSecretName());
+                try {
+                    db.insert(TABLE_EQUIPAGE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".addEquipage.input threw <" + e.toString() + ">.");
+                }
+                db.close();
+                return true; // Inserted successfully
+            } else {
+                db.close();
+                return false; // This ID already exists
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in addEquipage.");
+        }
+    }
+
+    public int deleteEquipage(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Equipage row = this.getEquipageById(id);
+            if(row != null) {
+                ContentValues values = new ContentValues();
+                values.put(KEY_ARCHIVED, new Date().getTime());
+                values.put(PK_EQUIPAGE, row.getId());
+                values.put(FK_COMMANDER, row.getCommander().getSecretName());
+                try {
+                    ArrayList<Person> people = getPersonsFromEquipage(row.getId());
+                    for (Person temp : people) {
+                        deletePerson(temp.getSecretName());
+                        temp.assignToEquipage(0);
+                        addPerson(temp);
+                    }
+                    db.insert(TABLE_EQUIPAGE_ARCHIVE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".deleteEquipage.insert threw <" + e.toString() + ">.");
+                }
+                db = this.getWritableDatabase();
+                result = db.delete(TABLE_EQUIPAGE, PK_EQUIPAGE + "=" + String.valueOf(id), null);
+            } else {
+                throw new NullPointerException("Can't delete equipage <" + String.valueOf(id) + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in deletePerson.");
+        }
+        return result;
+    }
+
+    public int deleteEquipageForOneMoment(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Equipage row = this.getEquipageById(id);
+            if(row != null) {
+                ContentValues values = new ContentValues();
+                values.put(KEY_ARCHIVED, new Date().getTime());
+                values.put(PK_EQUIPAGE, row.getId());
+                values.put(FK_COMMANDER, row.getCommander().getSecretName());
+                try {
+                    db.insert(TABLE_EQUIPAGE_ARCHIVE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".deleteEquipage.insert threw <" + e.toString() + ">.");
+                }
+                result = db.delete(TABLE_EQUIPAGE, PK_EQUIPAGE + "=" + String.valueOf(id), null);
+            } else {
+                throw new NullPointerException("Can't delete equipage <" + String.valueOf(id) + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in deletePerson.");
+        }
+        return result;
+    }
 
     public ArrayList<Equipage> getAllEquipages() {
         ArrayList<Equipage> equipageList = new ArrayList<>();
@@ -696,7 +931,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             Weapon row = this.getWeaponById(id);
             if(row != null) {
                 ContentValues values = new ContentValues();
-                values.put(PK_ARCHIVE, new Date().getTime());
+                values.put(KEY_ARCHIVED, new Date().getTime());
                 values.put(PK_WEAPON, row.getId());
                 values.put(KEY_MODEL, row.getModel());
                 values.put(FK_PERSON, row.getOwner().getSecretName());

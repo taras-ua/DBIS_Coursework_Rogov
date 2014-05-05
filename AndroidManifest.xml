@@ -73,5 +73,29 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="ua.zs.signalcorps.PeopleActivity"/>
         </activity>
+        <activity android:name=".WatchWeaponActivity"
+                  android:label="@string/one_weapon"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.WeaponActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.WeaponActivity"/>
+        </activity>
+        <activity android:name=".WatchEquipageActivity"
+                  android:label="@string/equipage"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.EquipageActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.EquipageActivity"/>
+        </activity>
+        <activity android:name=".AddEquipageActivity"
+                  android:label="@string/add_equipage"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.EquipageActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.EquipageActivity"/>
+        </activity>
     </application>
 </manifest>

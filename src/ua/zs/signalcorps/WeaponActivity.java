@@ -10,9 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.view.*;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.*;
 import ua.zs.elements.Weapon;
 
 import java.util.ArrayList;
@@ -92,7 +90,7 @@ public class WeaponActivity extends ActionBarActivity {
             for (int i = 0; i < weaponList.size(); i++) {
                 if(!( weaponList.get(i).getOwner().getFirstName().toUpperCase().startsWith(search) ||           // Фільтр по імені
                         weaponList.get(i).getOwner().getSecondName().toUpperCase().startsWith(search) ||          // Фільтр по прізвищу
-                        weaponList.get(i).getOwner().getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по батькові
+                        weaponList.get(i).getOwner().getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по-батькові
                         weaponList.get(i).getOwner().getSecretName().toUpperCase().startsWith(search) ||          // Фільтр по позивному
                         weaponList.get(i).getModel().toUpperCase().startsWith(search) ||                        // Фільтр по моделі
                         (weaponList.get(i).getId() != 0 ?
@@ -108,6 +106,19 @@ public class WeaponActivity extends ActionBarActivity {
     }
 
     private void handleIntent(Intent intent) {
+        ListView list = (ListView) findViewById(R.id.weaponView);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int chosenWeapon = Integer.parseInt( ((TextView) view.findViewById(R.id.numberView))
+                                                       .getText()
+                                                       .toString()
+                                                       .substring(1));
+                Intent watch = new Intent(WeaponActivity.this, WatchWeaponActivity.class);
+                watch.putExtra("weapon", chosenWeapon);
+                startActivity(watch);
+            }
+        });
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             setTitle(getResources().getString(R.string.weapon) +

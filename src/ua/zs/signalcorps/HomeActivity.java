@@ -7,10 +7,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.*;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import ua.zs.elements.Person;
 import ua.zs.elements.Rank;
 
@@ -49,7 +46,9 @@ public class HomeActivity extends ActionBarActivity {
         equipage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                Intent watch = new Intent(HomeActivity.this, WatchEquipageActivity.class);
+                watch.putExtra("equipage", user.getEquipage());
+                startActivity(watch);
             }
         });
     }
@@ -62,6 +61,18 @@ public class HomeActivity extends ActionBarActivity {
         list.setAdapter(adapter);
         TextView emptyList = (TextView) findViewById(R.id.noWeaponText);
         emptyList.setVisibility(list.getCount() > 0 ? View.GONE : View.VISIBLE);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int chosenWeapon = Integer.parseInt( ((TextView) view.findViewById(R.id.numberView))
+                        .getText()
+                        .toString()
+                        .substring(1));
+                Intent watch = new Intent(HomeActivity.this, WatchWeaponActivity.class);
+                watch.putExtra("weapon", chosenWeapon);
+                startActivity(watch);
+            }
+        });
     }
 
     private void initiateActionBarIconButton() {

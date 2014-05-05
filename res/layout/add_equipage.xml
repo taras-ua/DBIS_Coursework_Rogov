@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:background="@color/LMilitary">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/addEquipageParent"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/idRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/idText" android:hint="@string/id" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field" android:inputType="number"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/idNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/ownerRow">
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"
+                    android:ems="10"
+                    android:id="@+id/ownerText" android:hint="@string/commander_name" android:textColor="@color/DMilitary"
+                    android:textColorHint="@color/MMilitary" android:layout_margin="10dp" android:singleLine="true"
+                    android:minWidth="200dp" android:maxWidth="500dp" android:editable="true" android:enabled="true"
+                    android:background="@drawable/edit_field"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/ownerNeededMark" android:textColor="@color/MMilitary" android:textStyle="bold"/>
+        </LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/addHint" android:textColor="@color/MMilitary" android:editable="false"
+                android:clickable="false" android:layout_margin="10dp" android:text="@string/star_hint"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/buttonsRow" android:gravity="center">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:id="@+id/buttonAdd" android:layout_margin="25dp" android:background="@drawable/button"
+                    android:textColor="@color/DMilitary" android:clickable="true" android:minWidth="100dp"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:id="@+id/buttonCancel" android:layout_margin="25dp" android:background="@drawable/button"
+                    android:textColor="@color/DMilitary" android:clickable="true" android:minWidth="100dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

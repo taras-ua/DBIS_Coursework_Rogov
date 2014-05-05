@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/homeParentLayout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/LMilitary">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/idLayout" android:layout_margin="5dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weapon_view_id" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/idTextTitle" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/idTextView" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/modelLayout" android:layout_margin="5dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weapon_view_model" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/modelTextTitle" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/modelTextView" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/ownerLayout" android:layout_margin="5dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/owner" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/ownerTextTitle" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/ownerTextView" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+    </LinearLayout>
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/separator" android:background="@drawable/separator"
+            android:layout_marginLeft="15dp" android:layout_marginRight="15dp"/>
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/weaponImage"
+            android:layout_marginLeft="15dp" android:layout_marginRight="15dp" android:layout_marginTop="15dp"
+            android:src="@drawable/no_thumb"/>
+</LinearLayout>

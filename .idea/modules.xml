@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/UA Signal Corps.iml" filepath="$PROJECT_DIR$/UA Signal Corps.iml" />
-      <module fileurl="file:///media/Files/android-sdk/sdk/extras/android/support/v7/appcompat/appcompat.iml" filepath="/media/Files/android-sdk/sdk/extras/android/support/v7/appcompat/appcompat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appcompat/appcompat.iml" filepath="$PROJECT_DIR$/appcompat/appcompat.iml" />
     </modules>
   </component>
 </project>

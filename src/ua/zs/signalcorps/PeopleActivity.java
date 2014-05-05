@@ -37,7 +37,7 @@ public class PeopleActivity extends ActionBarActivity {
     private void initiateListView() {
         ListView list = (ListView) findViewById(R.id.peopleView);
         SignalCorpsDB dataBase = new SignalCorpsDB(this);
-        PersonArrayAdapter adapter = new PersonArrayAdapter(this, dataBase.getAllPersons());
+        PersonArrayAdapter adapter = new PersonArrayAdapter(this, dataBase.getAllPersons(), true);
         list.setAdapter(adapter);
     }
 
@@ -137,7 +137,7 @@ public class PeopleActivity extends ActionBarActivity {
                 }
             }
         }
-        PersonArrayAdapter adapter = new PersonArrayAdapter(this, peopleList);
+        PersonArrayAdapter adapter = new PersonArrayAdapter(this, peopleList, true);
         list.setAdapter(adapter);
     }
 

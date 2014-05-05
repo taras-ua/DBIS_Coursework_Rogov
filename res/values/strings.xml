@@ -21,9 +21,10 @@
     <string name="cancel">Відмінити</string>
     <string name="drawer_close">close</string>
     <string name="action_search">Пошук…</string>
-    <string name="action_add_person">Додати особу</string>
+    <string name="action_add">Додати</string>
     <string name="add_person">Додавання особової справи</string>
     <string name="add_weapon">Додавання одиниці зброї</string>
+    <string name="add_equipage">Додавання екіпажу</string>
     <string name="star_hint">* Обов’язкові до заповнення поля</string>
     <string name="name">Ім’я</string>
     <string name="surname">Прізвище</string>
@@ -63,6 +64,7 @@
     <string name="weapon">Зброя</string>
     <string name="equipages">Екіпажі</string>
     <string name="equipage_id">Екіпаж №</string>
+    <string name="equipage">Екіпаж</string>
     <string name="no_equipage">Не приписаний до екіпажу</string>
     <string name="search_query"> / фільтр: </string>
     <string name="number_sym"> №</string>
@@ -72,9 +74,15 @@
     <string name="model">Модель</string>
     <string name="id">Ідентифікатор</string>
     <string name="owner_not_found">Введеного позивного немає в базі</string>
-    <string name="delete_person">Звільнити</string>
+    <string name="to_archive">Архівувати</string>
+    <string name="edit">Редагувати</string>
     <string name="yes">Так</string>
     <string name="no">Ні</string>
     <string name="confirmation">Підтвердження</string>
     <string name="confirmation_message">Ви дійсно бажаєте архівувати цей запис?</string>
+    <string name="one_weapon">Екземпляр зброї</string>
+    <string name="weapon_view_id">Ідентифікатор:</string>
+    <string name="weapon_view_model">Модель:</string>
+    <string name="equipage_commander">Командир:</string>
+    <string name="commander_name">Позивний командира</string>
 </resources>

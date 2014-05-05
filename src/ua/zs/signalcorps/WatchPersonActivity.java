@@ -48,7 +48,9 @@ public class WatchPersonActivity extends Activity {
         equipage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                Intent watch = new Intent(WatchPersonActivity.this, WatchEquipageActivity.class);
+                watch.putExtra("equipage", user.getEquipage());
+                startActivity(watch);
             }
         });
     }
@@ -61,6 +63,18 @@ public class WatchPersonActivity extends Activity {
         list.setAdapter(adapter);
         TextView emptyList = (TextView) findViewById(R.id.noWeaponText);
         emptyList.setVisibility(list.getCount() > 0 ? View.GONE : View.VISIBLE);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int chosenWeapon = Integer.parseInt( ((TextView) view.findViewById(R.id.numberView))
+                        .getText()
+                        .toString()
+                        .substring(1));
+                Intent watch = new Intent(WatchPersonActivity.this, WatchWeaponActivity.class);
+                watch.putExtra("weapon", chosenWeapon);
+                startActivity(watch);
+            }
+        });
     }
 
     private void initiateActionBarIconButton() {
