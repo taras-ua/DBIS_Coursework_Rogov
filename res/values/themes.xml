@@ -12,6 +12,16 @@
         <item name="android:background">@drawable/action_bar_back</item>
         <item name="android:titleTextStyle">@style/Military.TitleTextStyle</item>
     </style>
+    <style name="Military.CalendarView"
+           parent="@android:style/Widget.Holo.CalendarView">
+        <item name="android:textColor">@color/DMilitary</item>
+        <item name="android:datePickerStyle">@style/Military.DatePicker</item>
+    </style>
+    <style name="Military.DatePicker"
+           parent="@android:style/Widget.Holo.DatePicker">
+        <item name="android:background">@color/MMilitary</item>
+        <item name="android:textColor">@color/LMilitary</item>
+    </style>
     <style name="Military.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/LMilitary</item>
     </style>

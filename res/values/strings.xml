@@ -24,6 +24,7 @@
     <string name="action_add">Додати</string>
     <string name="add_person">Додавання особової справи</string>
     <string name="add_weapon">Додавання одиниці зброї</string>
+    <string name="add_transport">Додавання траспортного засобу</string>
     <string name="add_equipage">Додавання екіпажу</string>
     <string name="star_hint">* Обов’язкові до заповнення поля</string>
     <string name="name">Ім’я</string>
@@ -74,6 +75,7 @@
     <string name="model">Модель</string>
     <string name="id">Ідентифікатор</string>
     <string name="owner_not_found">Введеного позивного немає в базі</string>
+    <string name="equipage_not_found">Введеного екіпажу немає в базі</string>
     <string name="to_archive">Архівувати</string>
     <string name="edit">Редагувати</string>
     <string name="yes">Так</string>
@@ -81,8 +83,12 @@
     <string name="confirmation">Підтвердження</string>
     <string name="confirmation_message">Ви дійсно бажаєте архівувати цей запис?</string>
     <string name="one_weapon">Екземпляр зброї</string>
+    <string name="one_transport">Одиниця транспорту</string>
     <string name="weapon_view_id">Ідентифікатор:</string>
     <string name="weapon_view_model">Модель:</string>
     <string name="equipage_commander">Командир:</string>
     <string name="commander_name">Позивний командира</string>
+    <string name="date_error">Введення майбутньої дати не допустиме.</string>
+    <string name="equipage_car">В складі екіпажу №</string>
+    <string name="last_techwok">Останній техогляд:</string>
 </resources>

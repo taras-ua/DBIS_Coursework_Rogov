@@ -33,7 +33,7 @@ public class AddWeaponActivity extends Activity {
                 String model = String.valueOf(((EditText) findViewById(R.id.modelText)).getText());
                 SignalCorpsDB db = new SignalCorpsDB(AddWeaponActivity.this);
                 if( !idText.equals("") && !model.equals("") && !secretName.equals("")) {
-                    if(id >= 0) {
+                    if(id > 0) {
                         if(db.getPersonBySecretName(secretName) != null) {
                             if(db.getPersonBySecretName(secretName).getRank() <= HomeActivity.user.getRank()) {
                                 if (!db.addWeapon(new Weapon(id, model, db.getPersonBySecretName(secretName)))) {

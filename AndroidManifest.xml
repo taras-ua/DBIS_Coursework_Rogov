@@ -65,6 +65,14 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="ua.zs.signalcorps.WeaponActivity"/>
         </activity>
+        <activity android:name=".AddTransportActivity"
+                  android:label="@string/add_weapon"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.TransportActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.TransportActivity"/>
+        </activity>
         <activity android:name=".WatchPersonActivity"
                   android:label="@string/person"
                   android:theme="@style/Military"
@@ -80,6 +88,14 @@
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="ua.zs.signalcorps.WeaponActivity"/>
+        </activity>
+        <activity android:name=".WatchTransportActivity"
+                  android:label="@string/one_transport"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.TransportActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.TransportActivity"/>
         </activity>
         <activity android:name=".WatchEquipageActivity"
                   android:label="@string/equipage"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:id="@+id/listPersonParent">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:id="@+id/nameLayout" android:layout_margin="5dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/modelView" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/numberView" android:gravity="center_vertical|left" android:singleLine="true"
+                android:ellipsize="marquee" android:textColor="@color/DMilitary" android:textStyle="bold"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/equipageView" android:layout_weight="1" android:gravity="center_vertical|left"
+        android:singleLine="true" android:ellipsize="marquee" android:textColor="@color/DMilitary"
+        android:layout_margin="5dp"/>
+</LinearLayout>

@@ -32,7 +32,7 @@ public class AddEquipageActivity extends Activity {
                 int id = Integer.valueOf( !idText.equals("") ? idText : "0" );
                 SignalCorpsDB db = new SignalCorpsDB(AddEquipageActivity.this);
                 if( !idText.equals("") && !secretName.equals("")) {
-                    if(id >= 0) {
+                    if(id > 0) {
                         if(db.getPersonBySecretName(secretName) != null) {
                             if(db.getPersonBySecretName(secretName).getRank() <= HomeActivity.user.getRank()) {
                                 if (!db.addEquipage(new Equipage(id, db.getPersonBySecretName(secretName)))) {

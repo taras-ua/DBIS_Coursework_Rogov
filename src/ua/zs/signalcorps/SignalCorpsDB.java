@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
     private static final String DATABASE_NAME = "SignalCorpsDB";
 
     public static final String TABLE_PERSON = "person";
@@ -198,7 +198,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "id_weapon INTEGER, " +
                     "model VARCHAR(15), " +
                     "fk_person VARCHAR(15), " +
-                    "archived INT)";
+                    "archived INTEGER)";
             try {
                 db.compileStatement(CREATE_WEAPON_TABLE).execute();
                 db.compileStatement(CREATE_WEAPON_ARCHIVE_TABLE).execute();
@@ -217,15 +217,15 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             String CREATE_TRANSPORT_TABLE = "CREATE TABLE transport (" +
                     "id_transport INTEGER PRIMARY KEY, " +
                     "model VARCHAR(15), " +
-                    "last_techwork INT, " +
+                    "last_techwork INTEGER, " +
                     "fk_equipage INTEGER)";
             String CREATE_TRANSPORT_ARCHIVE_TABLE = "CREATE TABLE transport_archive (" +
                     "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_transport INTEGER, " +
                     "model VARCHAR(15), " +
-                    "last_techwork INT, " +
+                    "last_techwork INTEGER, " +
                     "fk_equipage INTEGER, " +
-                    "archived INT)";
+                    "archived INTEGER)";
             try {
                 db.compileStatement(CREATE_TRANSPORT_TABLE).execute();
                 db.compileStatement(CREATE_TRANSPORT_ARCHIVE_TABLE).execute();
@@ -298,7 +298,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "id_package INTEGER, " +
                     "fk_contact INTEGER, " +
                     "classified CLASSIFIED, " +
-                    "archived INT)";
+                    "archived INTEGER)";
             try {
                 db.compileStatement(CREATE_PACKAGE_TABLE).execute();
                 db.compileStatement(CREATE_PACKAGE_ARCHIVE_TABLE).execute();
@@ -321,7 +321,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "id_archive_row INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_equipage INTEGER, " +
                     "fk_commander VARCHAR(15), " +
-                    "archived INT)";
+                    "archived INTEGER)";
             try {
                 db.compileStatement(CREATE_EQUIPAGE_TABLE).execute();
                 db.compileStatement(CREATE_EQUIPAGE_ARCHIVE_TABLE).execute();
@@ -356,8 +356,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             String CREATE_CONTACT_TABLE = "CREATE TABLE contact (" +
                     "id_contact INTEGER PRIMARY KEY, " +
                     "fk_equipage INTEGER, " +
-                    "started INT, " +
-                    "finished INT)";
+                    "started INTEGER, " +
+                    "finished INTEGER)";
             try {
                 db.compileStatement(CREATE_CONTACT_TABLE).execute();
             } catch (Exception e) {
@@ -390,7 +390,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     "fk_equipage INTEGER, " +
                     "password VARCHAR(30), " +
                     "classified CLASSIFIED, " +
-                    "archived INT)";
+                    "archived INTEGER)";
             try {
                 db.compileStatement(CREATE_PERSON_TABLE).execute();
                 db.compileStatement(CREATE_PERSON_ARCHIVE_TABLE).execute();
@@ -874,7 +874,88 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return null;
     }
 
+    public Equipage getEquipageFromArchive(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_EQUIPAGE_ARCHIVE, new String[] { "*" },
+                    PK_EQUIPAGE + " = ?", // where
+                    new String[] { String.valueOf(id) }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    KEY_ARCHIVED + " DESC"); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getEquipageFromArchive.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) {
+            Person commander = getPersonBySecretName(cursor.getString(1));
+            if(commander == null) {
+                commander = getPersonFromArchive(cursor.getString(1)).get(0);
+            }
+            return new Equipage(cursor.getInt(0), commander);
+        }
+        return null;
+    }
+
     // ###################################### WORK WITH TRANSPORT TABLE ######################################
+
+    public boolean addTransport(Transport transport) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) {
+            if(this.getTransportById(transport.getId()) == null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_TRANSPORT, transport.getId());
+                values.put(KEY_MODEL, transport.getModel());
+                values.put(FK_EQUIPAGE, transport.getOwner().getId());
+                values.put(KEY_LASTTECHWORK, transport.getLastTechwork().getTime());
+                try {
+                    db.insert(TABLE_TRANSPORT, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".addTransport.insert threw <" + e.toString() + ">.");
+                }
+                db.close();
+                return true; // Inserted successfully
+            } else {
+                db.close();
+                return false; // This ID already exists
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in addTransport.");
+        }
+    }
+
+    public int deleteTransport(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Transport row = this.getTransportById(id);
+            if(row != null) {
+                ContentValues values = new ContentValues();
+                values.put(KEY_ARCHIVED, new Date().getTime());
+                values.put(PK_TRANSPORT, row.getId());
+                values.put(KEY_MODEL, row.getModel());
+                values.put(FK_EQUIPAGE, row.getOwner().getId());
+                values.put(KEY_LASTTECHWORK, row.getLastTechwork().getTime());
+                try {
+                    db.insert(TABLE_TRANSPORT_ARCHIVE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".deleteTransport.insert threw <" + e.toString() + ">.");
+                }
+                result = db.delete(TABLE_TRANSPORT, PK_TRANSPORT + "=" + String.valueOf(id), null);
+            } else {
+                throw new NullPointerException("Can't delete transport <" + String.valueOf(id) + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in deleteTransport.");
+        }
+        return result;
+    }
 
     public ArrayList<Transport> getAllTransport() {
         ArrayList<Transport> transportList = new ArrayList<>();
@@ -891,11 +972,44 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             return null;
         }
         if(cursor.getCount() > 0) do {
-            transportList.add(new Transport(cursor.getInt(0), cursor.getString(1), new Date(Integer.valueOf(cursor.getString(2))),
-                    getEquipageById(cursor.getInt(3))));
+            Equipage owner = getEquipageById(cursor.getInt(3));
+            if(owner == null) {
+                owner = getEquipageFromArchive(cursor.getInt(3));
+            }
+            transportList.add(new Transport(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)),
+                    owner));
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
         return transportList;
+    }
+
+    public Transport getTransportById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_TRANSPORT, new String[] { "*" },
+                    PK_TRANSPORT + " = ?", // where
+                    new String[] { String.valueOf(id) }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    null); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getTransportById.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) {
+            Equipage owner = getEquipageById(cursor.getInt(3));
+            if(owner == null) {
+                owner = getEquipageFromArchive(cursor.getInt(3));
+            }
+            return new Transport(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)),
+                    owner);
+        }
+        return null;
     }
 
     // ###################################### WORK WITH WEAPON TABLE ######################################
