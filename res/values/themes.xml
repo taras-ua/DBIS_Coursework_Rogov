@@ -30,7 +30,8 @@
     </style>
     <style name="Military.PopupTextStyle" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
         <item name="android:textColor">@color/LMilitary</item>
-    </style><style name="Military.OverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-    <item name="android:src">@drawable/ic_action_overflow</item>
-</style>
+    </style>
+    <style name="Military.OverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
 </resources>

@@ -88,7 +88,7 @@ public class TransportActivity extends ActionBarActivity {
         ArrayList<Transport> transportList = dataBase.getAllTransport();
         if(!query.equals("")) {
             for (int i = 0; i < transportList.size(); i++) {
-                if(!( transportList.get(i).getModel().toUpperCase().startsWith(search) ||  // Фільтр по моделі
+                if(!( transportList.get(i).getModel().toUpperCase().contains(search) ||  // Фільтр по моделі
                         (transportList.get(i).getOwner().getId() != 0 ?
                                 String.valueOf(transportList.get(i).getOwner().getId()) :
                                 "").equals(search) ||                                      // Пошук по екіпажу

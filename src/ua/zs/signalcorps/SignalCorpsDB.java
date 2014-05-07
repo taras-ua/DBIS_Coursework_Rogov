@@ -1012,6 +1012,37 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return null;
     }
 
+    public ArrayList<Transport> getTransportOfEquipage(int id) {
+        ArrayList<Transport> transportList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_TRANSPORT, new String[] { "*" },
+                    FK_EQUIPAGE + " = ?", // where
+                    new String[] { String.valueOf(id) }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    null); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getAllTransport.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) do {
+            Equipage owner = getEquipageById(cursor.getInt(3));
+            if(owner == null) {
+                owner = getEquipageFromArchive(cursor.getInt(3));
+            }
+            transportList.add(new Transport(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)),
+                    owner));
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return transportList;
+    }
+
     // ###################################### WORK WITH WEAPON TABLE ######################################
 
     public boolean addWeapon(Weapon weapon) {

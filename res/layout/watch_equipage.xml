@@ -44,17 +44,43 @@
             android:layout_height="wrap_content"
             android:id="@+id/homeSeparator2" android:background="@drawable/separator"
             android:layout_marginLeft="15dp" android:layout_marginRight="15dp"/>
-    <TextView
+    <TabHost
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/people" android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/peopleHeadlineText" android:singleLine="true"
-            android:ellipsize="marquee" android:textColor="@color/DMilitary"
-            android:layout_marginTop="5dp" android:layout_marginBottom="10dp" android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp" android:gravity="center"/>
-    <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/peopleListView" android:layout_marginLeft="50dp" android:layout_marginRight="50dp"
-            android:layout_weight="1"/>
+            android:layout_height="fill_parent" android:id="@+id/tabHost">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+            <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:tag="tab0"
+                        android:text="@string/people"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        />
+                <TextView
+                        android:tag="tab1"
+                        android:text="@string/transport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        />
+            </TabWidget>
+            <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/peopleListView" android:layout_margin="10dp"/>
+                <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/transportListView" android:layout_margin="10dp"/>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
 </LinearLayout>

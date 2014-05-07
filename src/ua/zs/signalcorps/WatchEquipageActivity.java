@@ -9,10 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import ua.zs.elements.Equipage;
 import ua.zs.elements.Rank;
 
@@ -29,6 +26,7 @@ public class WatchEquipageActivity extends Activity {
         equipage = db.getEquipageById(intent.getIntExtra("equipage", 0));
         initiateEquipagePageElements();
         initiatePeopleView();
+        initiateTransportView();
     }
 
     private void initiateEquipagePageElements() {
@@ -37,6 +35,40 @@ public class WatchEquipageActivity extends Activity {
         id.setText(" №" + String.valueOf(equipage.getId()));
         commander.setText(" " + Rank.toString(this, equipage.getCommander().getRank()).toLowerCase() +
                 " " + equipage.getCommander().toString());
+        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+        tabHost.setup();
+        final TabWidget tabWidget = tabHost.getTabWidget();
+        final FrameLayout tabContent = tabHost.getTabContentView();
+        // Get the original tab textviews and remove them from the viewgroup.
+        TextView[] originalTextViews = new TextView[tabWidget.getTabCount()];
+        for (int index = 0; index < tabWidget.getTabCount(); index++) {
+            originalTextViews[index] = (TextView) tabWidget.getChildTabViewAt(index);
+        }
+        tabWidget.removeAllViews();
+        // Ensure that all tab content childs are not visible at startup.
+        for (int index = 0; index < tabContent.getChildCount(); index++) {
+            tabContent.getChildAt(index).setVisibility(View.GONE);
+        }
+        // Create the tabspec based on the textview childs in the xml file.
+        // Or create simple tabspec instances in any other way...
+        for (int index = 0; index < originalTextViews.length; index++) {
+            final TextView tabWidgetTextView = originalTextViews[index];
+            final View tabContentView = tabContent.getChildAt(index);
+            TabHost.TabSpec tabSpec = tabHost.newTabSpec((String) tabWidgetTextView.getTag());
+            tabSpec.setContent(new TabHost.TabContentFactory() {
+                @Override
+                public View createTabContent(String tag) {
+                    return tabContentView;
+                }
+            });
+            if (tabWidgetTextView.getBackground() == null) {
+                tabSpec.setIndicator(tabWidgetTextView.getText());
+            } else {
+                tabSpec.setIndicator(tabWidgetTextView.getText(), tabWidgetTextView.getBackground());
+            }
+            tabHost.addTab(tabSpec);
+        }
+		//tabHost.setCurrentTab(0);
     }
 
     private void initiatePeopleView() {
@@ -50,12 +82,32 @@ public class WatchEquipageActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String chosenUser = ((TextView) view.findViewById(R.id.secretNameView)).getText().toString();
                 Intent watch;
-                if(chosenUser.equals(HomeActivity.user.getSecretName())) {
+                if (chosenUser.equals(HomeActivity.user.getSecretName())) {
                     watch = new Intent(WatchEquipageActivity.this, HomeActivity.class);
                 } else {
                     watch = new Intent(WatchEquipageActivity.this, WatchPersonActivity.class);
                     watch.putExtra("user", ((TextView) view.findViewById(R.id.secretNameView)).getText().toString());
                 }
+                startActivity(watch);
+            }
+        });
+    }
+
+    private void initiateTransportView() {
+        ListView list = (ListView) findViewById(R.id.transportListView);
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        TransportArrayAdapter adapter = new TransportArrayAdapter(this,
+                dataBase.getTransportOfEquipage(equipage.getId()), false);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int chosenTransport = Integer.parseInt(((TextView) view.findViewById(R.id.numberView))
+                        .getText()
+                        .toString()
+                        .substring(1));
+                Intent watch = new Intent(WatchEquipageActivity.this, WatchTransportActivity.class);
+                watch.putExtra("transport", chosenTransport);
                 startActivity(watch);
             }
         });

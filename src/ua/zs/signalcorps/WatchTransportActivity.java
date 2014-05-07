@@ -18,6 +18,14 @@ import java.text.SimpleDateFormat;
 public class WatchTransportActivity extends Activity {
 
     private Transport transport;
+    private final static int[] availableImages = { R.drawable.bmp1, R.drawable.bmp2, R.drawable.bmp3,
+                                                   R.drawable.bmpv64, R.drawable.brdm2, R.drawable.btmp84,
+                                                   R.drawable.gaz66, R.drawable.mi26, R.drawable.t64,
+                                                   R.drawable.uaz469 };
+    private final static String[] availableTransport = { "БМП-1", "БМП-2", "БМП-3",
+                                                         "БМПВ-64", "БРДМ-2", "БТМП-84",
+                                                         "ГАЗ-66", "Мі-26", "Т-64",
+                                                         "УАЗ-469" };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +48,12 @@ public class WatchTransportActivity extends Activity {
         owner.setText(String.valueOf(transport.getOwner().getId()));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         techView.setText(" " + simpleDateFormat.format(transport.getLastTechwork()));
+        for (int i = 0; i < availableTransport.length; i++) {
+            if(transport.getModel().startsWith(availableTransport[i])) {
+                transportImage.setImageResource(availableImages[i]);
+                break;
+            }
+        }
     }
 
     private void initiateActionBarIconButton() {

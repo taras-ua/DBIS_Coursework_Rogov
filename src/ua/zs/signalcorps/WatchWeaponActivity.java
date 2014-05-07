@@ -17,6 +17,14 @@ import ua.zs.elements.Weapon;
 public class WatchWeaponActivity extends Activity {
 
     private Weapon weapon;
+    private final static int[] availableImages = { R.drawable.ak74, R.drawable.ak74m, R.drawable.akmsu,
+                                                   R.drawable.aks74, R.drawable.aks74u, R.drawable.igla,
+                                                   R.drawable.nrs, R.drawable.pm, R.drawable.rpg7,
+                                                   R.drawable.rpk74, R.drawable.sgd };
+    private final static String[] availableWeapon = { "АК-74", "АК-74М", "АКМСУ",
+                                                      "АКС-74", "АКС-74У", "ПЗРК \"ІГЛА\"",
+                                                      "НРС", "9-мм ПМ", "РПГ-7",
+                                                      "РПК-74", "СГД" };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +45,12 @@ public class WatchWeaponActivity extends Activity {
         model.setText(" " + weapon.getModel());
         owner.setText(" " + Rank.toString(this, weapon.getOwner().getRank()).toLowerCase() +
                       " " + weapon.getOwner().toString());
+        for (int i = 0; i < availableWeapon.length; i++) {
+            if(weapon.getModel().startsWith(availableWeapon[i])) {
+                weaponImage.setImageResource(availableImages[i]);
+                break;
+            }
+        }
     }
 
     private void initiateActionBarIconButton() {

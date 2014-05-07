@@ -92,7 +92,7 @@ public class WeaponActivity extends ActionBarActivity {
                         weaponList.get(i).getOwner().getSecondName().toUpperCase().startsWith(search) ||          // Фільтр по прізвищу
                         weaponList.get(i).getOwner().getFathersName().toUpperCase().startsWith(search) ||         // Фільтр по по-батькові
                         weaponList.get(i).getOwner().getSecretName().toUpperCase().startsWith(search) ||          // Фільтр по позивному
-                        weaponList.get(i).getModel().toUpperCase().startsWith(search) ||                        // Фільтр по моделі
+                        weaponList.get(i).getModel().toUpperCase().contains(search) ||                        // Фільтр по моделі
                         (weaponList.get(i).getId() != 0 ?
                                 String.valueOf(weaponList.get(i).getId()) :
                                 "").equals(search) )) {                                              // Пошук по номеру
