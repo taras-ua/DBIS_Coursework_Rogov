@@ -19,9 +19,4 @@ public class WiredContact extends Contact {
         this.node = node;
     }
 
-    @Override
-    public String toString() {
-        return "Дротовий контакт " + super.toString();
-    }
-
 }

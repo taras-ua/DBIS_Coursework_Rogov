@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.*;
 import android.widget.Button;
+import android.widget.ListView;
 
 public class ContactsActivity extends ActionBarActivity {
 
@@ -19,6 +20,20 @@ public class ContactsActivity extends ActionBarActivity {
         setContentView(R.layout.contacts);
         initiateActionBarIconButton();
         initiateDrawerButtons();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleIntent(getIntent());
+    }
+
+    private void initiateListView() {
+        ListView list = (ListView) findViewById(R.id.contactsView);
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        PersonArrayAdapter adapter = new PersonArrayAdapter(this, dataBase.getAllPersons(), true);
+        list.setAdapter(adapter);
     }
 
     private void initiateActionBarIconButton() {

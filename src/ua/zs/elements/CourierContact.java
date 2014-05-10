@@ -19,9 +19,4 @@ public class CourierContact extends Contact {
         this.receiver = receiver;
     }
 
-    @Override
-    public String toString() {
-        return "Фельд’єгерська доставка " + super.toString();
-    }
-
 }

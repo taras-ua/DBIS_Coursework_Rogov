@@ -5,13 +5,13 @@ import java.util.Date;
 public class Contact {
 
     private int id;
-    private Equipage executant;
+    private Equipage equipage;
     private Date startTime;
     private Date endTime;
 
-    public Contact(int id, Equipage executant, Date startTime) {
+    public Contact(int id, Equipage equipage, Date startTime) {
         this.id = id;
-        this.executant = executant;
+        this.equipage = equipage;
         this.startTime = startTime;
     }
 
@@ -19,8 +19,8 @@ public class Contact {
         return id;
     }
 
-    public Equipage getExecutant() {
-        return executant;
+    public Equipage getEquipage() {
+        return equipage;
     }
 
     public Date getStartTime() {
@@ -40,8 +40,8 @@ public class Contact {
         this.id = id;
     }
 
-    public void changeExecutant(Equipage executant) {
-        this.executant = executant;
+    public void changeEquipage(Equipage equipage) {
+        this.equipage = equipage;
     }
 
     public void changeStartTime(Date startTime) {

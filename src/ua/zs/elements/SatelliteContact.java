@@ -19,10 +19,5 @@ public class SatelliteContact extends Contact {
         this.satellite = satellite;
     }
 
-    @Override
-    public String toString() {
-        return "Супутниковий контакт " + super.toString();
-    }
-
 }
 

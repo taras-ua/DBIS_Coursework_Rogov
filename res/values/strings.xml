@@ -56,6 +56,10 @@
     <string name="CONFIDENTIAL">Форма 3</string>
     <string name="SECRET">Форма 2</string>
     <string name="TOP_SECRET">Форма 1</string>
+    <string name="UNCLASSIFIED_PACKAGE">Відкритий</string>
+    <string name="CONFIDENTIAL_PACKAGE">Таємний</string>
+    <string name="SECRET_PACKAGE">Цілком таємний</string>
+    <string name="TOP_SECRET_PACKAGE">Особливої важливості</string>
     <string name="profile">Профіль</string>
     <string name="logout">Вийти</string>
     <string name="weapon_of_person">Приписана зброя:</string>
@@ -68,7 +72,7 @@
     <string name="equipage">Екіпаж</string>
     <string name="no_equipage">Не приписаний до екіпажу</string>
     <string name="search_query"> / фільтр: </string>
-    <string name="number_sym"> №</string>
+    <string name="number_sym">№</string>
     <string name="owner">Власник:</string>
     <string name="no_permission">Ви не можете оперувати інформацією військових вищого звання.</string>
     <string name="login_name_owner">Позивний власника</string>
@@ -91,4 +95,5 @@
     <string name="date_error">Введення майбутньої дати не допустиме.</string>
     <string name="equipage_car">В складі екіпажу №</string>
     <string name="last_techwok">Останній техогляд:</string>
+    <string name="classified_level">Допуск:</string>
 </resources>

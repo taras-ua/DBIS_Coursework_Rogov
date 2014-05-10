@@ -59,6 +59,14 @@
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="" android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/classifiedText" android:singleLine="true"
+            android:ellipsize="marquee" android:textColor="@color/DMilitary"
+            android:layout_marginTop="5dp" android:layout_marginBottom="10dp" android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp" android:gravity="center"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/weapon_of_person" android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/weaponHeadlineText" android:singleLine="true"
             android:ellipsize="marquee" android:textColor="@color/DMilitary"

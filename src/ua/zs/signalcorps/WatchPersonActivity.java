@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import ua.zs.elements.Classified;
 import ua.zs.elements.Person;
 import ua.zs.elements.Rank;
 
@@ -33,6 +34,7 @@ public class WatchPersonActivity extends Activity {
         TextView rankText = (TextView) findViewById(R.id.rankTextView);
         TextView name = (TextView) findViewById(R.id.nameView);
         TextView secret = (TextView) findViewById(R.id.secretNameView);
+        TextView classified = (TextView) findViewById(R.id.classifiedText);
         Button equipage = (Button) findViewById(R.id.equipageButton);
         rankImage.setImageResource(Rank.toImage(user.getRank()));
         rankText.setText(Rank.toString(this, user.getRank()));
@@ -40,6 +42,8 @@ public class WatchPersonActivity extends Activity {
                 user.getFirstName() + " " +
                 user.getFathersName());
         secret.setText(user.getSecretName());
+        classified.setText(getResources().getString(R.string.classified_level) + " " +
+                Classified.levelOfPerson(this, user.getClassified()).toLowerCase());
         equipage.setText(user.getEquipage() != 0 ?
                 getResources().getString(R.string.equipage_id) +
                         String.valueOf(user.getEquipage()) :

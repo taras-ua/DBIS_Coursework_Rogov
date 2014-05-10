@@ -48,8 +48,7 @@ public class Package {
 
     @Override
     public String toString() {
-        return "Пакет " + Classified.toString(classified) +
-               " №" + String.valueOf(id);
+        return "№" + String.valueOf(id);
     }
 
 }

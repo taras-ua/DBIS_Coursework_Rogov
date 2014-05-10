@@ -46,7 +46,7 @@ public class WatchWeaponActivity extends Activity {
         owner.setText(" " + Rank.toString(this, weapon.getOwner().getRank()).toLowerCase() +
                       " " + weapon.getOwner().toString());
         for (int i = 0; i < availableWeapon.length; i++) {
-            if(weapon.getModel().startsWith(availableWeapon[i])) {
+            if(weapon.getModel().equals(availableWeapon[i])) {
                 weaponImage.setImageResource(availableImages[i]);
                 break;
             }

@@ -28,10 +28,5 @@ public class RadioRelatedContact extends Contact {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Радіорелейний контакт " + super.toString();
-    }
-
 }
 

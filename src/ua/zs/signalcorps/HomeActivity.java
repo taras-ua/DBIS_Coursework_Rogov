@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.*;
 import android.widget.*;
+import ua.zs.elements.Classified;
 import ua.zs.elements.Person;
 import ua.zs.elements.Rank;
 
@@ -31,6 +32,7 @@ public class HomeActivity extends ActionBarActivity {
         TextView rankText = (TextView) findViewById(R.id.rankTextView);
         TextView name = (TextView) findViewById(R.id.nameView);
         TextView secret = (TextView) findViewById(R.id.secretNameView);
+        TextView classified = (TextView) findViewById(R.id.classifiedText);
         Button equipage = (Button) findViewById(R.id.equipageButton);
         rankImage.setImageResource(Rank.toImage(user.getRank()));
         rankText.setText(Rank.toString(this, user.getRank()));
@@ -38,6 +40,8 @@ public class HomeActivity extends ActionBarActivity {
                 user.getFirstName() + " " +
                 user.getFathersName());
         secret.setText(user.getSecretName());
+        classified.setText(getResources().getString(R.string.classified_level) + " " +
+                Classified.levelOfPerson(this, user.getClassified()).toLowerCase());
         equipage.setText(user.getEquipage() != 0 ?
                 getResources().getString(R.string.equipage_id) +
                         String.valueOf(user.getEquipage()) :

@@ -19,9 +19,4 @@ public class RadioContact extends Contact {
         this.frequency = frequency;
     }
 
-    @Override
-    public String toString() {
-        return "Радіоконтакт " + super.toString();
-    }
-
 }
