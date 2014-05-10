@@ -11,6 +11,7 @@ public class CourierContact extends Contact {
         this.receiver = receiver;
     }
 
+    @Override
     public String getReceiver() {
         return receiver;
     }

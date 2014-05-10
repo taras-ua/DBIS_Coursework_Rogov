@@ -56,6 +56,26 @@ public class Contact {
         this.endTime = new Date();
     }
 
+    public String getReceiver() {
+        return "";
+    }
+
+    public int getFrequency() {
+        return -1;
+    }
+
+    public double getAzimuth() {
+        return -1.0;
+    }
+
+    public String getSatellite() {
+        return "";
+    }
+
+    public int getNode() {
+        return -1;
+    }
+
     @Override
     public String toString() {
         return "№" + String.valueOf(id);

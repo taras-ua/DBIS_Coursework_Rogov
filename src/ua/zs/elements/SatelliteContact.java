@@ -11,6 +11,7 @@ public class SatelliteContact extends Contact {
         this.satellite = satellite;
     }
 
+    @Override
     public String getSatellite() {
         return satellite;
     }

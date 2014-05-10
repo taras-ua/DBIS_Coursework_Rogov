@@ -16,6 +16,7 @@ public class RadioRelatedContact extends Contact {
         }
     }
 
+    @Override
     public double getAzimuth() {
         return azimuth;
     }

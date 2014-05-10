@@ -11,6 +11,7 @@ public class WiredContact extends Contact {
         this.node = node;
     }
 
+    @Override
     public int getNode() {
         return node;
     }

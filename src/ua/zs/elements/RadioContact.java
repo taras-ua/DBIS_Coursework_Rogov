@@ -11,6 +11,7 @@ public class RadioContact extends Contact {
         this.frequency = frequency;
     }
 
+    @Override
     public int getFrequency() {
         return frequency;
     }

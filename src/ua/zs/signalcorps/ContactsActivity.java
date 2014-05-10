@@ -1,14 +1,24 @@
 package ua.zs.signalcorps;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.*;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import ua.zs.elements.Contact;
+import ua.zs.elements.Equipage;
+import ua.zs.elements.WiredContact;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class ContactsActivity extends ActionBarActivity {
 
@@ -21,6 +31,8 @@ public class ContactsActivity extends ActionBarActivity {
         initiateActionBarIconButton();
         initiateDrawerButtons();
         handleIntent(getIntent());
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        dataBase.addContact(new WiredContact(12, new Equipage(23, null), new Date(), 34));
     }
 
     @Override
@@ -32,7 +44,7 @@ public class ContactsActivity extends ActionBarActivity {
     private void initiateListView() {
         ListView list = (ListView) findViewById(R.id.contactsView);
         SignalCorpsDB dataBase = new SignalCorpsDB(this);
-        PersonArrayAdapter adapter = new PersonArrayAdapter(this, dataBase.getAllPersons(), true);
+        ContactArrayAdapter adapter = new ContactArrayAdapter(this, dataBase.getAllContacts(), true);
         list.setAdapter(adapter);
     }
 
@@ -62,14 +74,6 @@ public class ContactsActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.contacts_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
@@ -90,11 +94,87 @@ public class ContactsActivity extends ActionBarActivity {
             return true;
         }
         switch(item.getItemId()) {
+            case R.id.contact_menu_add:
+                initiateContactAdding();
+                return true;
             case R.id.logout:
                 userLogout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void initiateContactAdding() {
+        /*Intent intent = new Intent(ContactsActivity.this, AddContactActivity.class);
+        startActivity(intent);*/
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.contacts_menu, menu);
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.contact_menu_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        ((ImageView) searchView.findViewById(R.id.search_button))
+                .setImageResource(R.drawable.ic_action_search);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void searchContact(String query) {
+        String search = query.toUpperCase();
+        ListView list = (ListView) findViewById(R.id.contactsView);
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        ArrayList<Contact> contactList = dataBase.getAllContacts();
+        if(!query.equals("")) {
+            for (int i = 0; i < contactList.size(); i++) {
+                if (!(contactList.get(i).getSatellite().toUpperCase().startsWith(search) ||
+                        contactList.get(i).getReceiver().toUpperCase().contains(search) ||
+                        String.valueOf(contactList.get(i).getEquipage().getId()).equals(search) ||
+                        (contactList.get(i).getNode() > 0 ?
+                                String.valueOf(contactList.get(i).getNode()) :
+                                "").equals(search) ||
+                        String.valueOf(contactList.get(i).getId()).equals(search) ||
+                        (contactList.get(i).getFrequency() > 0 ?
+                                String.valueOf(contactList.get(i).getFrequency()) :
+                                "").equals(search) ||
+                        (contactList.get(i).getAzimuth() > -1.0 ?
+                                String.valueOf(contactList.get(i).getAzimuth()) :
+                                "").startsWith(search))) {
+                    contactList.remove(i);
+                    i--;
+                }
+            }
+        }
+        ContactArrayAdapter adapter = new ContactArrayAdapter(this, contactList, true);
+        list.setAdapter(adapter);
+    }
+
+    private void handleIntent(Intent intent) {
+        ListView list = (ListView) findViewById(R.id.contactsView);
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int chosenContact = Integer.parseInt( ((TextView) view.findViewById(R.id.numberView))
+                        .getText()
+                        .toString()
+                        .substring(1));
+                Intent watch = new Intent(ContactsActivity.this, WatchContactActivity.class);
+                watch.putExtra("contact", chosenContact);
+                startActivity(watch);
+            }
+        });*/
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            setTitle(getResources().getString(R.string.contacts) +
+                    getResources().getString(R.string.search_query) + query);
+            searchContact(query);
+        } else {
+            initiateListView();
         }
     }
 
