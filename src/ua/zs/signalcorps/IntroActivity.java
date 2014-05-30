@@ -33,7 +33,7 @@ public class IntroActivity extends Activity {
     private void initiateDB() {
         dataBase = new SignalCorpsDB(this);
         dataBase.addPerson(new Person("КИЇВ-1", "Михайло", "Володимирович", "Коваль",
-                Rank.GENERAL_OF_ARMY, 0, "1234", Classified.TOP_SECRET)); // Example user 1
+                Rank.GENERAL_OF_ARMY, 1, "1234", Classified.TOP_SECRET)); // Example user 1
     }
 
     private void initiateUIElements() {

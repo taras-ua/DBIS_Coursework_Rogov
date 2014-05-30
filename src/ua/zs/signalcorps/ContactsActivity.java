@@ -14,11 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import ua.zs.elements.Contact;
-import ua.zs.elements.Equipage;
-import ua.zs.elements.WiredContact;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ContactsActivity extends ActionBarActivity {
 
@@ -31,8 +28,6 @@ public class ContactsActivity extends ActionBarActivity {
         initiateActionBarIconButton();
         initiateDrawerButtons();
         handleIntent(getIntent());
-        SignalCorpsDB dataBase = new SignalCorpsDB(this);
-        dataBase.addContact(new WiredContact(12, new Equipage(23, null), new Date(), 34));
     }
 
     @Override
@@ -106,8 +101,8 @@ public class ContactsActivity extends ActionBarActivity {
     }
 
     private void initiateContactAdding() {
-        /*Intent intent = new Intent(ContactsActivity.this, AddContactActivity.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(ContactsActivity.this, AddContactActivity.class);
+        startActivity(intent);
     }
 
     @Override

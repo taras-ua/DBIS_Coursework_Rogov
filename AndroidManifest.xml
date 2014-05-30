@@ -125,5 +125,13 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="ua.zs.signalcorps.EquipageActivity"/>
         </activity>
+        <activity android:name=".AddContactActivity"
+                  android:label="@string/add_contact"
+                  android:theme="@style/Military"
+                  android:parentActivityName="ua.zs.signalcorps.ContactsActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="ua.zs.signalcorps.ContactsActivity"/>
+        </activity>
     </application>
 </manifest>

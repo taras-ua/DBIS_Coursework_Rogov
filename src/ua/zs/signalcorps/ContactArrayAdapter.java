@@ -1,6 +1,7 @@
 package ua.zs.signalcorps;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import ua.zs.elements.Contact;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ContactArrayAdapter extends ArrayAdapter<Contact> {
@@ -36,8 +38,11 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
         TextView equipage = (TextView) rowView.findViewById(R.id.equipageView);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String timeString = simpleDateFormat.format(list.get(position).getStartTime());
-        if(list.get(position).getEndTime() != null) {
-            timeString += " => " + simpleDateFormat.format(list.get(position).getEndTime());
+        try {
+            Date finishDate = list.get(position).getEndTime();
+            timeString += " => " + simpleDateFormat.format(finishDate);
+        } catch (Exception e) {
+            Log.i("ContactArrayAdapter", "Adding not finished contact to ListView.");
         }
         number.setText(list.get(position).toString());
         time.setText(timeString);
@@ -46,19 +51,19 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
         equipage.setVisibility(showEquipage ? View.VISIBLE : View.GONE);
         type.setImageResource(R.drawable.ic_action_contact);
         if(list.get(position).getNode() > -1) {
-            //type.setImageResource(R.drawable.wired_contact);
+            type.setImageResource(R.drawable.ic_wired);
         }
         if(!list.get(position).getSatellite().equals("")) {
-            //type.setImageResource(R.drawable.satellite_contact);
+            type.setImageResource(R.drawable.ic_satellite);
         }
         if(list.get(position).getAzimuth() > -1.0) {
-            //type.setImageResource(R.drawable.radiorelated_contact);
+            type.setImageResource(R.drawable.ic_radiorelated);
         }
         if(list.get(position).getFrequency() > -1) {
-            //type.setImageResource(R.drawable.radio_contact);
+            type.setImageResource(R.drawable.ic_radio);
         }
         if(!list.get(position).getReceiver().equals("")) {
-            //type.setImageResource(R.drawable.courier_contact);
+            type.setImageResource(R.drawable.ic_courier);
         }
         return rowView;
     }

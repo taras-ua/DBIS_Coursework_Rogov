@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "SignalCorpsDB";
 
     public static final String TABLE_PERSON = "person";
@@ -95,7 +95,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_ARCHIVE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON_ARCHIVE);
         createTables(db);
-        //createTriggers(db);
+        createTriggers(db);
     }
 
     // ###################################### DOMAINS CREATION ######################################
@@ -134,11 +134,13 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
 
     // ###################################### TRIGGERS CREATION ######################################
 
-    /*private void createTriggers(SQLiteDatabase db) {
+    private void createTriggers(SQLiteDatabase db) {
         if(db != null) {
             String CREATE_ON_NEW_PERSON_TRIGGER = "CREATE TRIGGER IF NOT EXISTS insert_person AFTER INSERT ON " +
-                    TABLE_PERSON + " WHEN new." + FK_EQUIPAGE + " > 0 BEGIN CASE WHEN (SELECT COUNT(*) FROM " +
-                    TABLE_EQUIPAGE + " WHERE " + PK_EQUIPAGE + " = new." + FK_EQUIPAGE + ") = 0 THEN INSERT INTO " +
+                    TABLE_PERSON + " CASE WHEN new." + FK_EQUIPAGE + " > 0 " +
+                        "THEN CASE WHEN (SELECT COUNT(*) FROM " + TABLE_EQUIPAGE +
+                        " WHERE " + PK_EQUIPAGE + " = new." + FK_EQUIPAGE + ") = 0 " +
+                            "THEN INSERT INTO " +
                     TABLE_EQUIPAGE + " VALUES (new." + FK_EQUIPAGE + ", new." + PK_PERSON + "); END;";
             try {
                 db.compileStatement(CREATE_ON_NEW_PERSON_TRIGGER).execute();
@@ -149,7 +151,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         } else {
             throw new NullPointerException("Can't reach database in createTriggers.");
         }
-    }*/
+    }
 
     // ###################################### TABLES CREATION ######################################
 
@@ -715,6 +717,20 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return personsList;
     }
 
+    public int getPersonInEquipageCount(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_PERSON +
+                    " WHERE " + FK_EQUIPAGE + "=" + String.valueOf(id)
+                    , null);
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } else {
+            throw new NullPointerException("Can't reach database in getPersonInEquipageCount.");
+        }
+    }
+
     // ###################################### WORK WITH EQUIPAGE TABLE ######################################
 
     public boolean addEquipage(Equipage equipage) {
@@ -1040,6 +1056,20 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         return transportList;
     }
 
+    public int getTransportInEquipageCount(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_TRANSPORT +
+                    " WHERE " + FK_EQUIPAGE + "=" + String.valueOf(id)
+                    , null);
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } else {
+            throw new NullPointerException("Can't reach database in getTransportInEquipageCount.");
+        }
+    }
+
     // ###################################### WORK WITH WEAPON TABLE ######################################
 
     public boolean addWeapon(Weapon weapon) {
@@ -1189,7 +1219,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 try {
                     values.put(KEY_FINISHED, contact.getEndTime().getTime());
                 } catch (Exception e) {
-                    Log.e(DATABASE_NAME, "Adding not finished contact.");
+                    values.put(KEY_FINISHED, 0);
+                    Log.i(DATABASE_NAME, "Adding not finished contact.");
                 }
                 try {
                     db.insert(TABLE_CONTACT, null, values);
@@ -1198,8 +1229,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                 }
                 ContentValues valuesForSubtype = new ContentValues();
                 if(contact.getNode() > -1) {
-                    values.put(PK_CONTACT, contact.getId());
-                    values.put(KEY_NODE, contact.getNode());
+                    valuesForSubtype.put(PK_CONTACT, contact.getId());
+                    valuesForSubtype.put(KEY_NODE, contact.getNode());
                     try {
                         db.insert(TABLE_CONTACT_WIRED, null, valuesForSubtype);
                     } catch (Exception e) {
@@ -1207,8 +1238,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     }
                 }
                 if(!contact.getSatellite().equals("")) {
-                    values.put(PK_CONTACT, contact.getId());
-                    values.put(KEY_SATELLITE, contact.getSatellite());
+                    valuesForSubtype.put(PK_CONTACT, contact.getId());
+                    valuesForSubtype.put(KEY_SATELLITE, contact.getSatellite());
                     try {
                         db.insert(TABLE_CONTACT_SATELLITE, null, valuesForSubtype);
                     } catch (Exception e) {
@@ -1216,8 +1247,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     }
                 }
                 if(contact.getAzimuth() > -1.0) {
-                    values.put(PK_CONTACT, contact.getId());
-                    values.put(KEY_AZIMUTH, contact.getAzimuth());
+                    valuesForSubtype.put(PK_CONTACT, contact.getId());
+                    valuesForSubtype.put(KEY_AZIMUTH, contact.getAzimuth());
                     try {
                         db.insert(TABLE_CONTACT_RADIORELATED, null, valuesForSubtype);
                     } catch (Exception e) {
@@ -1225,8 +1256,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     }
                 }
                 if(contact.getFrequency() > -1) {
-                    values.put(PK_CONTACT, contact.getId());
-                    values.put(KEY_FREQUENCY, contact.getFrequency());
+                    valuesForSubtype.put(PK_CONTACT, contact.getId());
+                    valuesForSubtype.put(KEY_FREQUENCY, contact.getFrequency());
                     try {
                         db.insert(TABLE_CONTACT_RADIO, null, valuesForSubtype);
                     } catch (Exception e) {
@@ -1234,8 +1265,8 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     }
                 }
                 if(!contact.getReceiver().equals("")) {
-                    values.put(PK_CONTACT, contact.getId());
-                    values.put(KEY_DELIVERTO, contact.getReceiver());
+                    valuesForSubtype.put(PK_CONTACT, contact.getId());
+                    valuesForSubtype.put(KEY_DELIVERTO, contact.getReceiver());
                     try {
                         db.insert(TABLE_CONTACT_COURIER, null, valuesForSubtype);
                     } catch (Exception e) {
@@ -1284,97 +1315,93 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         ArrayList<Contact> contactList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
-        Cursor cursorSubtype;
         if(db != null) {
-            cursor = db.query(TABLE_CONTACT, new String[] { "*" }, null, null, null, null, KEY_STARTED + " DESC");
+            Contact result;
+            cursor = db.rawQuery("SELECT " + TABLE_CONTACT + "." + PK_CONTACT + "," +
+                    TABLE_CONTACT + "." + FK_EQUIPAGE + "," +
+                    TABLE_CONTACT + "." + KEY_STARTED + "," +
+                    TABLE_CONTACT + "." + KEY_FINISHED + "," +
+                    TABLE_CONTACT_WIRED + "." + KEY_NODE + "," +
+                    "CAST('WIRED' AS CHAR(20)) FROM " + TABLE_CONTACT +
+                    " JOIN " + TABLE_CONTACT_WIRED + " ON " +
+                    TABLE_CONTACT + "." + PK_CONTACT + "=" +
+                    TABLE_CONTACT_WIRED + "." + PK_CONTACT +
+                    " UNION ALL " +
+                    "SELECT " + TABLE_CONTACT + "." + PK_CONTACT + "," +
+                    TABLE_CONTACT + "." + FK_EQUIPAGE + "," +
+                    TABLE_CONTACT + "." + KEY_STARTED + "," +
+                    TABLE_CONTACT + "." + KEY_FINISHED + "," +
+                    TABLE_CONTACT_SATELLITE + "." + KEY_SATELLITE + "," +
+                    "CAST('SATELLITE' AS CHAR(20)) FROM " + TABLE_CONTACT +
+                    " JOIN " + TABLE_CONTACT_SATELLITE + " ON " +
+                    TABLE_CONTACT + "." + PK_CONTACT + "=" +
+                    TABLE_CONTACT_SATELLITE + "." + PK_CONTACT +
+                    " UNION ALL " +
+                    "SELECT " + TABLE_CONTACT + "." + PK_CONTACT + "," +
+                    TABLE_CONTACT + "." + FK_EQUIPAGE + "," +
+                    TABLE_CONTACT + "." + KEY_STARTED + "," +
+                    TABLE_CONTACT + "." + KEY_FINISHED + "," +
+                    TABLE_CONTACT_RADIORELATED + "." + KEY_AZIMUTH + "," +
+                    "CAST('RADIORELATED' AS CHAR(20)) FROM " + TABLE_CONTACT +
+                    " JOIN " + TABLE_CONTACT_RADIORELATED + " ON " +
+                    TABLE_CONTACT + "." + PK_CONTACT + "=" +
+                    TABLE_CONTACT_RADIORELATED + "." + PK_CONTACT +
+                    " UNION ALL " +
+                    "SELECT " + TABLE_CONTACT + "." + PK_CONTACT + "," +
+                    TABLE_CONTACT + "." + FK_EQUIPAGE + "," +
+                    TABLE_CONTACT + "." + KEY_STARTED + "," +
+                    TABLE_CONTACT + "." + KEY_FINISHED + "," +
+                    TABLE_CONTACT_RADIO + "." + KEY_FREQUENCY + "," +
+                    "CAST('RADIO' AS CHAR(20)) FROM " + TABLE_CONTACT +
+                    " JOIN " + TABLE_CONTACT_RADIO + " ON " +
+                    TABLE_CONTACT + "." + PK_CONTACT + "=" +
+                    TABLE_CONTACT_RADIO + "." + PK_CONTACT +
+                    " UNION ALL " +
+                    "SELECT " + TABLE_CONTACT + "." + PK_CONTACT + "," +
+                    TABLE_CONTACT + "." + FK_EQUIPAGE + "," +
+                    TABLE_CONTACT + "." + KEY_STARTED + "," +
+                    TABLE_CONTACT + "." + KEY_FINISHED + "," +
+                    TABLE_CONTACT_COURIER + "." + KEY_DELIVERTO + "," +
+                    "CAST('COURIER' AS CHAR(20)) FROM " + TABLE_CONTACT +
+                    " JOIN " + TABLE_CONTACT_COURIER + " ON " +
+                    TABLE_CONTACT + "." + PK_CONTACT + "=" +
+                    TABLE_CONTACT_COURIER + "." + PK_CONTACT +
+                    " ORDER BY " + KEY_STARTED + " DESC"
+                    , null);
+            cursor.moveToFirst();
+            if(cursor.getCount() > 0) do {
+                Equipage owner = getEquipageById(cursor.getInt(1));
+                if(owner == null) {
+                    owner = getEquipageFromArchive(cursor.getInt(1));
+                }
+                switch(cursor.getString(5)) {
+                    case "WIRED": result = new WiredContact(cursor.getInt(0), owner,
+                                    new Date(cursor.getLong(2)), cursor.getInt(4)); break;
+                    case "SATELLITE": result = new SatelliteContact(cursor.getInt(0), owner,
+                                    new Date(cursor.getLong(2)), cursor.getString(4)); break;
+                    case "RADIORELATED": result = new RadioRelatedContact(cursor.getInt(0), owner,
+                                    new Date(cursor.getLong(2)), cursor.getDouble(4)); break;
+                    case "RADIO": result = new RadioContact(cursor.getInt(0), owner,
+                                    new Date(cursor.getLong(2)), cursor.getInt(4)); break;
+                    default: result = new CourierContact(cursor.getInt(0), owner,
+                                    new Date(cursor.getLong(2)), cursor.getString(4)); break;
+                }
+                if(cursor.getLong(3) != 0) { // if finished contact
+                    result.finishOn(new Date(cursor.getLong(3)));
+                }
+                try {
+                    if(result.getStartTime().getTime() < result.getEndTime().getTime()) {
+                        contactList.add(result);
+                    }
+                } catch (NullPointerException e) {
+                    Log.i(DATABASE_NAME, "Contact " + cursor.getString(0) + " not finished.");
+                    contactList.add(result);
+                }
+                cursor.moveToNext();
+            } while(!cursor.isAfterLast());
         } else {
             throw new NullPointerException("Can't reach database in getAllContacts.");
         }
-        if (cursor != null) {
-            cursor.moveToFirst();
-        } else {
-            return null;
-        }
-        if(cursor.getCount() > 0) do {
-            Equipage owner = getEquipageById(cursor.getInt(1));
-            if(owner == null) {
-                owner = getEquipageFromArchive(cursor.getInt(1));
-            }
-            Contact result;
-            cursorSubtype = db.query(TABLE_CONTACT_WIRED, new String[] { "*" },
-                    PK_CONTACT + " = ?", // where
-                    new String[] { cursor.getString(0) }, // value to replace "?"
-                    null, // groupBy
-                    null, // having
-                    null); // orderBy
-            if(cursorSubtype.getCount() > 0) {
-                cursorSubtype.moveToFirst();
-                result = new WiredContact(cursor.getInt(0), owner,
-                            new Date(cursor.getLong(2)), cursorSubtype.getInt(1));
-            } else {
-                cursorSubtype = db.query(TABLE_CONTACT_SATELLITE, new String[] { "*" },
-                        PK_CONTACT + " = ?", // where
-                        new String[] { cursor.getString(0) }, // value to replace "?"
-                        null, // groupBy
-                        null, // having
-                        null); // orderBy
-                if(cursorSubtype.getCount() > 0) {
-                    cursorSubtype.moveToFirst();
-                    result = new SatelliteContact(cursor.getInt(0), owner,
-                            new Date(cursor.getLong(2)), cursorSubtype.getString(1));
-                } else {
-                    cursorSubtype = db.query(TABLE_CONTACT_RADIORELATED, new String[] { "*" },
-                            PK_CONTACT + " = ?", // where
-                            new String[] { cursor.getString(0) }, // value to replace "?"
-                            null, // groupBy
-                            null, // having
-                            null); // orderBy
-                    if(cursorSubtype.getCount() > 0) {
-                        cursorSubtype.moveToFirst();
-                        result = new RadioRelatedContact(cursor.getInt(0), owner,
-                                new Date(cursor.getLong(2)), cursorSubtype.getDouble(1));
-                    } else {
-                        cursorSubtype = db.query(TABLE_CONTACT_RADIO, new String[] { "*" },
-                                PK_CONTACT + " = ?", // where
-                                new String[] { cursor.getString(0) }, // value to replace "?"
-                                null, // groupBy
-                                null, // having
-                                null); // orderBy
-                        if(cursorSubtype.getCount() > 0) {
-                            cursorSubtype.moveToFirst();
-                            result = new RadioContact(cursor.getInt(0), owner,
-                                    new Date(cursor.getLong(2)), cursorSubtype.getInt(1));
-                        } else {
-                            cursorSubtype = db.query(TABLE_CONTACT_COURIER, new String[] { "*" },
-                                    PK_CONTACT + " = ?", // where
-                                    new String[] { cursor.getString(0) }, // value to replace "?"
-                                    null, // groupBy
-                                    null, // having
-                                    null); // orderBy
-                            if(cursorSubtype.getCount() > 0) {
-                                cursorSubtype.moveToFirst();
-                                result = new CourierContact(cursor.getInt(0), owner,
-                                        new Date(cursor.getLong(2)), cursorSubtype.getString(1));
-                            } else {
-                                Log.e(DATABASE_NAME, "No ids found in subtype table for contact #" +
-                                        cursor.getString(0));
-                                return null;
-                            }
-                        }
-                    }
-                }
-            }
-            try {
-                result.finishOn(new Date(cursor.getLong(3)));
-                if(result.getStartTime().getTime() < result.getEndTime().getTime()) {
-                    contactList.add(result);
-                }
-            } catch (NullPointerException e) {
-                Log.i(DATABASE_NAME, "Contact " + cursor.getString(0) + " not finished.");
-                contactList.add(result);
-            }
-            cursor.moveToNext();
-        } while(!cursor.isAfterLast());
         return contactList;
     }
 

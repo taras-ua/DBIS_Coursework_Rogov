@@ -93,7 +93,22 @@
     <string name="equipage_commander">Командир:</string>
     <string name="commander_name">Позивний командира</string>
     <string name="date_error">Введення майбутньої дати не допустиме.</string>
+    <string name="date_error_vv">Введення минулого часу не допустиме.</string>
     <string name="equipage_car">В складі екіпажу №</string>
     <string name="last_techwok">Останній техогляд:</string>
     <string name="classified_level">Допуск:</string>
+    <string name="add_contact">Наказ на контакт</string>
+    <string name="time_of_contact">Час встановлення зв’язку</string>
+    <string name="contact_param">Параметри контакту</string>
+    <string name="contact_type">Засіб зв’язку</string>
+    <string name="contact_wired">Проводовий зв’язок</string>
+    <string name="contact_satellite">Супутниковий зв’язок</string>
+    <string name="contact_radiorelated">Радіо-рел. зв’язок</string>
+    <string name="contact_radio">Радіозв’язок</string>
+    <string name="contact_courier">ФПЗ</string>
+    <string name="wired_hint">Номер вузла</string>
+    <string name="satellite_hint">Супутник</string>
+    <string name="radiorelated_hint">Азимут</string>
+    <string name="radio_hint">Частота</string>
+    <string name="courier_hint">Отримувач</string>
 </resources>

@@ -51,6 +51,7 @@ public class WatchEquipageActivity extends Activity {
         }
         // Create the tabspec based on the textview childs in the xml file.
         // Or create simple tabspec instances in any other way...
+        SignalCorpsDB db = new SignalCorpsDB(this);
         for (int index = 0; index < originalTextViews.length; index++) {
             final TextView tabWidgetTextView = originalTextViews[index];
             final View tabContentView = tabContent.getChildAt(index);
@@ -62,9 +63,25 @@ public class WatchEquipageActivity extends Activity {
                 }
             });
             if (tabWidgetTextView.getBackground() == null) {
-                tabSpec.setIndicator(tabWidgetTextView.getText());
+                if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.people))) {
+                    tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
+                            String.valueOf(db.getPersonInEquipageCount(equipage.getId())));
+                }
+                if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.transport))) {
+                    tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
+                            String.valueOf(db.getTransportInEquipageCount(equipage.getId())));
+                }
             } else {
-                tabSpec.setIndicator(tabWidgetTextView.getText(), tabWidgetTextView.getBackground());
+                if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.people))) {
+                    tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
+                            String.valueOf(db.getPersonInEquipageCount(equipage.getId())),
+                            tabWidgetTextView.getBackground());
+                }
+                if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.transport))) {
+                    tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
+                            String.valueOf(db.getTransportInEquipageCount(equipage.getId())),
+                            tabWidgetTextView.getBackground());
+                }
             }
             tabHost.addTab(tabSpec);
         }
