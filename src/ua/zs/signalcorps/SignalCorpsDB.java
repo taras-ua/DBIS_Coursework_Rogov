@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 27;
     private static final String DATABASE_NAME = "SignalCorpsDB";
 
     public static final String TABLE_PERSON = "person";
@@ -730,6 +730,27 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         } else {
             throw new NullPointerException("Can't reach database in getPersonInEquipageCount.");
         }
+    }
+
+    public ArrayList<String> getAllPersonsSecretNames() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> result = new ArrayList<>();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PERSON, new String[] { PK_PERSON }, null, null, null, null, KEY_RANK + " DESC");
+        } else {
+            throw new NullPointerException("Can't reach database in getAllPersonsSecretNames.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) do {
+            result.add(cursor.getString(0));
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return result;
     }
 
     // ###################################### WORK WITH EQUIPAGE TABLE ######################################
