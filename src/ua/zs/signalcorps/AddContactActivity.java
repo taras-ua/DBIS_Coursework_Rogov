@@ -111,7 +111,9 @@ public class AddContactActivity extends Activity {
                 int id = Integer.valueOf( !idText.equals("") ? idText : "0" );
                 int idOwner = Integer.valueOf( !equipage.equals("") ? equipage : "0" );
                 String paramString = String.valueOf(((EditText) findViewById(R.id.infoText)).getText());
-                Date startDate = new Date(((DatePicker) findViewById(R.id.timeText)).getCalendarView().getDate());
+                Date startDate = new Date(((DatePicker) findViewById(R.id.dateText)).getCalendarView().getDate() +
+                        ((TimePicker) findViewById(R.id.timeText)).getCurrentMinute() * 60000 +
+                        ((TimePicker) findViewById(R.id.timeText)).getCurrentHour() * 3600000); // to milliseconds
                 Spinner type = (Spinner) findViewById(R.id.typeText);
                 SignalCorpsDB db = new SignalCorpsDB(AddContactActivity.this);
                 if( !idText.equals("") && !paramString.equals("") && !equipage.equals("")) {

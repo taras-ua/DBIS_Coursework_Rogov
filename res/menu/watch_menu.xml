@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/edit"
-          android:icon="@android:drawable/ic_menu_edit"
-          android:title="@string/edit"
-          android:showAsAction="ifRoom"/>
     <item android:id="@+id/delete"
           android:icon="@drawable/ic_action_discard"
           android:title="@string/to_archive"

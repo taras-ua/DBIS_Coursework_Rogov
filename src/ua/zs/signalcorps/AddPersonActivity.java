@@ -53,7 +53,7 @@ public class AddPersonActivity extends ActionBarActivity {
                                         AddPersonActivity.this.finish();
                                 }
                             } else {
-                                Toast.makeText(AddPersonActivity.this, R.string.exists_error, Toast.LENGTH_LONG)
+                                Toast.makeText(AddPersonActivity.this, R.string.no_permission, Toast.LENGTH_LONG)
                                         .show();
                             }
                         } else {

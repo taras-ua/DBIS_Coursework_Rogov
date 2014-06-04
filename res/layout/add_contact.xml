@@ -96,8 +96,12 @@
         <DatePicker
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/timeText" android:calendarViewShown="true" android:spinnersShown="false"
+                android:id="@+id/dateText" android:calendarViewShown="true" android:spinnersShown="false"
                 />
+        <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeText"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

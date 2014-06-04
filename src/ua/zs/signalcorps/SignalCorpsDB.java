@@ -7,13 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import ua.zs.elements.*;
+import ua.zs.elements.Package;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class SignalCorpsDB extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
     private static final String DATABASE_NAME = "SignalCorpsDB";
 
     public static final String TABLE_PERSON = "person";
@@ -60,7 +61,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
 
     public static final String FK_EQUIPAGE = "fk_equipage";
     public static final String FK_COMMANDER = "fk_commander";
-    public static final String FK_CONATCT = "fk_contact";
+    public static final String FK_CONTACT = "fk_contact";
     public static final String FK_PERSON = "fk_person";
 
     public SignalCorpsDB(Context context) {
@@ -1284,6 +1285,143 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         }
     }
 
+    public int getContactsInEquipageCount(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_CONTACT +
+                    " WHERE " + FK_EQUIPAGE + "=" + String.valueOf(id) + " AND " +
+                    KEY_FINISHED + "<>" + KEY_STARTED
+                    , null);
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } else {
+            throw new NullPointerException("Can't reach database in getContactsInEquipageCount.");
+        }
+    }
+
+    public int getInProgressContactsInEquipageCount(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_CONTACT +
+                    " WHERE " + FK_EQUIPAGE + "=" + String.valueOf(id) + " AND " +
+                    KEY_FINISHED + "=0"
+                    , null);
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } else {
+            throw new NullPointerException("Can't reach database in getContactsInEquipageCount.");
+        }
+    }
+
+    public boolean addPackage(Package pack) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) {
+            if(this.getPackageById(pack.getId()) == null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_PACKAGE, pack.getId());
+                values.put(FK_CONTACT, pack.getDelivery().getId());
+                values.put(KEY_CLASSIFIED, pack.getClassified());
+                try {
+                    db.insert(TABLE_PACKAGE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".addPackage.insert threw <" + e.toString() + ">.");
+                }
+                db.close();
+                return true; // Inserted successfully
+            } else {
+                db.close();
+                return false; // This ID already exists
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in addPackage.");
+        }
+    }
+
+    public Package getPackageById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PACKAGE, new String[] { "*" },
+                    PK_PACKAGE + " = ?", // where
+                    new String[] { String.valueOf(id) }, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    null); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getPackageById.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        if(cursor.getCount() > 0) {
+            Contact contact = getContactById(cursor.getInt(1));
+            CourierContact courierContact = new CourierContact(cursor.getInt(1), contact.getEquipage(),
+                    contact.getStartTime(), contact.getReceiver());
+            return new Package(cursor.getInt(0), courierContact, cursor.getInt(2));
+        }
+        return null;
+    }
+
+    public ArrayList<Package> getPackaegOfContact(int contactId) {
+        ArrayList<Package> packages = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        if(db != null) {
+            cursor = db.query(TABLE_PACKAGE, new String[] { "*" },
+                    FK_CONTACT + " = " + String.valueOf(contactId), // where
+                    null, // value to replace "?"
+                    null, // groupBy
+                    null, // having
+                    KEY_CLASSIFIED); // orderBy
+        } else {
+            throw new NullPointerException("Can't reach database in getPackaegOfContact.");
+        }
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            return null;
+        }
+        Contact contact = getContactById(contactId);
+        CourierContact courierContact = new CourierContact(contactId, contact.getEquipage(), contact.getStartTime(),
+                                                    contact.getReceiver());
+        if(cursor.getCount() > 0) do {
+            packages.add(new Package(cursor.getInt(0), courierContact, cursor.getInt(2)));
+            cursor.moveToNext();
+        } while(!cursor.isAfterLast());
+        return packages;
+    }
+
+    public int deletePackage(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Package pack = this.getPackageById(id);
+            if(pack != null) {
+                ContentValues values = new ContentValues();
+                values.put(KEY_ARCHIVED, new Date().getTime());
+                values.put(PK_PACKAGE, pack.getId());
+                values.put(FK_CONTACT, pack.getDelivery().getId());
+                values.put(KEY_CLASSIFIED, pack.getClassified());
+                try {
+                    db.insert(TABLE_PACKAGE_ARCHIVE, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".deleteWeapon.insert threw <" + e.toString() + ">.");
+                }
+                result = db.delete(TABLE_PACKAGE, PK_PACKAGE + "=" + String.valueOf(id), null);
+            } else {
+                throw new NullPointerException("Can't delete package <" + String.valueOf(id) + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in deletePackage.");
+        }
+        return result;
+    }
+
     public int cancelContact(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int result;
@@ -1306,7 +1444,34 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                         "It's not in table now.");
             }
         } else {
-            throw new NullPointerException("Can't reach database in cancelWiredContact.");
+            throw new NullPointerException("Can't reach database in cancelContact.");
+        }
+        return result;
+    }
+
+    public int finishContact(int id, Date date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result;
+        if(db != null) {
+            Contact row = this.getContactById(id);
+            if(row != null) {
+                ContentValues values = new ContentValues();
+                values.put(PK_CONTACT, row.getId());
+                values.put(KEY_STARTED, row.getStartTime().getTime());
+                values.put(FK_EQUIPAGE, row.getEquipage().getId());
+                values.put(KEY_FINISHED, date.getTime());
+                result = db.delete(TABLE_CONTACT, PK_CONTACT + "=" + String.valueOf(id), null);
+                try {
+                    db.insert(TABLE_CONTACT, null, values);
+                } catch (Exception e) {
+                    Log.e(DATABASE_NAME, ".finishContact.insert threw <" + e.toString() + ">.");
+                }
+            } else {
+                throw new NullPointerException("Can't delete contact <" + String.valueOf(id) + ">. " +
+                        "It's not in table now.");
+            }
+        } else {
+            throw new NullPointerException("Can't reach database in finishContact.");
         }
         return result;
     }
@@ -1493,8 +1658,10 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     }
                 }
             }
-            try {
+            if(cursor.getLong(3) != 0) { // if finished contact
                 result.finishOn(new Date(cursor.getLong(3)));
+            }
+            try {
                 if(result.getStartTime().getTime() < result.getEndTime().getTime()) {
                     return result;
                 }
@@ -1512,7 +1679,7 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         Cursor cursor;
         Cursor cursorSubtype;
         if(db != null) {
-            cursor = db.query(TABLE_CONTACT_WIRED, new String[] { "*" },
+            cursor = db.query(TABLE_CONTACT, new String[] { "*" },
                     FK_EQUIPAGE + " = ?", // where
                     new String[] { String.valueOf(id) }, // value to replace "?"
                     null, // groupBy
@@ -1595,8 +1762,10 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
                     }
                 }
             }
-            try {
+            if(cursor.getLong(3) != 0) { // if finished contact
                 result.finishOn(new Date(cursor.getLong(3)));
+            }
+            try {
                 if(result.getStartTime().getTime() < result.getEndTime().getTime()) {
                     contactList.add(result);
                 }

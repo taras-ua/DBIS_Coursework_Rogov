@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:id="@+id/listPersonParent">
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/classifiedView" android:gravity="center_vertical|left" android:singleLine="true"
+            android:ellipsize="marquee" android:textColor="@color/DMilitary"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="" android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/idView" android:gravity="center_vertical|left" android:singleLine="true"
+            android:ellipsize="marquee" android:textColor="@color/DMilitary" android:textStyle="bold"
+            android:layout_weight="1"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteButton" android:src="@drawable/ic_action_discard"
+            android:background="@color/MMilitary"/>
+</LinearLayout>

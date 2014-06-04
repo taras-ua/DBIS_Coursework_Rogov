@@ -1,5 +1,6 @@
 package ua.zs.elements;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Contact {
@@ -53,7 +54,7 @@ public class Contact {
     }
 
     public void finish() {
-        this.endTime = new Date();
+        this.endTime = Calendar.getInstance().getTime();
     }
 
     public String getReceiver() {

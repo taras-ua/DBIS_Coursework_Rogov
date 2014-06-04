@@ -27,6 +27,7 @@ public class WatchEquipageActivity extends Activity {
         initiateEquipagePageElements();
         initiatePeopleView();
         initiateTransportView();
+        initiateContactsView();
     }
 
     private void initiateEquipagePageElements() {
@@ -71,6 +72,11 @@ public class WatchEquipageActivity extends Activity {
                     tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
                             String.valueOf(db.getTransportInEquipageCount(equipage.getId())));
                 }
+                if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.contacts))) {
+                    tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
+                            String.valueOf(db.getInProgressContactsInEquipageCount(equipage.getId())) + "/" +
+                            String.valueOf(db.getContactsInEquipageCount(equipage.getId())));
+                }
             } else {
                 if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.people))) {
                     tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
@@ -81,6 +87,12 @@ public class WatchEquipageActivity extends Activity {
                     tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
                             String.valueOf(db.getTransportInEquipageCount(equipage.getId())),
                             tabWidgetTextView.getBackground());
+                }
+                if(String.valueOf(tabWidgetTextView.getText()).equals(getResources().getString(R.string.contacts))) {
+                    tabSpec.setIndicator(tabWidgetTextView.getText() + " : " +
+                            String.valueOf(db.getInProgressContactsInEquipageCount(equipage.getId())) + "/" +
+                            String.valueOf(db.getContactsInEquipageCount(equipage.getId())));
+                            tabWidgetTextView.getBackground();
                 }
             }
             tabHost.addTab(tabSpec);
@@ -105,6 +117,26 @@ public class WatchEquipageActivity extends Activity {
                     watch = new Intent(WatchEquipageActivity.this, WatchPersonActivity.class);
                     watch.putExtra("user", ((TextView) view.findViewById(R.id.secretNameView)).getText().toString());
                 }
+                startActivity(watch);
+            }
+        });
+    }
+
+    private void initiateContactsView() {
+        ListView list = (ListView) findViewById(R.id.contactsListView);
+        SignalCorpsDB dataBase = new SignalCorpsDB(this);
+        ContactArrayAdapter adapter = new ContactArrayAdapter(this,
+                dataBase.getContactsOfEquipage(equipage.getId()), false);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int chosenContact = Integer.parseInt( ((TextView) view.findViewById(R.id.numberView))
+                        .getText()
+                        .toString()
+                        .substring(1));
+                Intent watch = new Intent(WatchEquipageActivity.this, WatchContactActivity.class);
+                watch.putExtra("contact", chosenContact);
                 startActivity(watch);
             }
         });

@@ -67,6 +67,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         />
+                <TextView
+                        android:tag="tab2"
+                        android:text="@string/contacts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        />
             </TabWidget>
             <FrameLayout
                     android:id="@android:id/tabcontent"
@@ -80,6 +86,10 @@
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           android:id="@+id/transportListView" android:layout_margin="10dp"/>
+                <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/contactsListView" android:layout_margin="10dp"/>
             </FrameLayout>
         </LinearLayout>
     </TabHost>

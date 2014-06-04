@@ -10,9 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.view.*;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.*;
 import ua.zs.elements.Contact;
 
 import java.util.ArrayList;
@@ -151,7 +149,7 @@ public class ContactsActivity extends ActionBarActivity {
 
     private void handleIntent(Intent intent) {
         ListView list = (ListView) findViewById(R.id.contactsView);
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 int chosenContact = Integer.parseInt( ((TextView) view.findViewById(R.id.numberView))
@@ -162,7 +160,7 @@ public class ContactsActivity extends ActionBarActivity {
                 watch.putExtra("contact", chosenContact);
                 startActivity(watch);
             }
-        });*/
+        });
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             setTitle(getResources().getString(R.string.contacts) +
