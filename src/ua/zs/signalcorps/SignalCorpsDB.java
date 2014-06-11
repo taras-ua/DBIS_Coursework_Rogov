@@ -96,7 +96,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_ARCHIVE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WEAPON_ARCHIVE);
         createTables(db);
-        createTriggers(db);
     }
 
     // ###################################### DOMAINS CREATION ######################################
@@ -130,27 +129,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             Log.i(DATABASE_NAME, ".createDomains > domains creating finished.");
         } else {
             throw new NullPointerException("Can't reach database in createDomains.");
-        }
-    }
-
-    // ###################################### TRIGGERS CREATION ######################################
-
-    private void createTriggers(SQLiteDatabase db) {
-        if(db != null) {
-            String CREATE_ON_NEW_PERSON_TRIGGER = "CREATE TRIGGER IF NOT EXISTS insert_person AFTER INSERT ON " +
-                    TABLE_PERSON + " CASE WHEN new." + FK_EQUIPAGE + " > 0 " +
-                        "THEN CASE WHEN (SELECT COUNT(*) FROM " + TABLE_EQUIPAGE +
-                        " WHERE " + PK_EQUIPAGE + " = new." + FK_EQUIPAGE + ") = 0 " +
-                            "THEN INSERT INTO " +
-                    TABLE_EQUIPAGE + " VALUES (new." + FK_EQUIPAGE + ", new." + PK_PERSON + "); END;";
-            try {
-                db.compileStatement(CREATE_ON_NEW_PERSON_TRIGGER).execute();
-            } catch (Exception e) {
-                Log.e(DATABASE_NAME, ".createTriggers threw <" +e.toString()+">. " +
-                        "Is statement <"+CREATE_ON_NEW_PERSON_TRIGGER+"> valid?");
-            }
-        } else {
-            throw new NullPointerException("Can't reach database in createTriggers.");
         }
     }
 
@@ -587,49 +565,6 @@ public class SignalCorpsDB extends SQLiteOpenHelper {
             cursor.moveToNext();
         } while(!cursor.isAfterLast());
         return false;
-    }
-
-    public ArrayList<Person> getPersonBySearchQuery(String search) {
-        String searchString = search.toUpperCase();
-        ArrayList<Person> personsList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
-        String queryForEquipage = " OR " + FK_EQUIPAGE + "=" + searchString;
-        try {
-            Integer equipage = Integer.parseInt(searchString);
-            if(equipage.equals(Integer.valueOf(0))) {
-                queryForEquipage = "";
-            }
-        } catch(NumberFormatException e) {
-            queryForEquipage = "";       // This will cancel searching integer fields if search string is NaN
-        }
-        if(db != null) {
-            cursor = db.query(TABLE_PERSON, new String[] { "*" },
-                    "upper(" + KEY_NAME + ") LIKE '" + searchString + "%' OR " +
-                            "upper(" + PK_PERSON + ") LIKE '" + searchString + "%' OR " +
-                            "upper(" + KEY_FAMILY_NAME + ") LIKE '" + searchString + "%' OR " +
-                            "upper(" + KEY_FATHER_NAME + ") LIKE '" + searchString + "%'" +
-                            queryForEquipage, // where
-                    null, // params
-                    null, // groupBy
-                    null, // having
-                    KEY_RANK + " DESC"); // orderBy
-        } else {
-            throw new NullPointerException("Can't reach database in getAllPersons.");
-        }
-        if (cursor != null) {
-            cursor.moveToFirst();
-        } else {
-            return null;
-        }
-        if(cursor.getCount() > 0) do {
-            personsList.add(new Person(cursor.getString(0), cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getInt(4),
-                    cursor.getInt(5), cursor.getString(6),
-                    cursor.getInt(7)));
-            cursor.moveToNext();
-        } while(!cursor.isAfterLast());
-        return personsList;
     }
 
     public ArrayList<Person> getPersonsFromEquipage(int id) {

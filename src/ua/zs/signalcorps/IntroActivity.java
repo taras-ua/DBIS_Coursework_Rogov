@@ -34,7 +34,7 @@ public class IntroActivity extends Activity {
         dataBase = new SignalCorpsDB(this);
         dataBase.addPerson(new Person("КИЇВ-1", "Михайло", "Володимирович", "Коваль",
                 Rank.GENERAL_OF_ARMY, 1, "1234", Classified.TOP_SECRET)); // Example user 1
-        //new SignalCorpsDataBaseFiller(this).test(); // Fills DB with test rows
+        //new SignalCorpsDataBaseFiller(this).test(); // Fills DB with test rows. Needs file in ExtStorage
     }
 
     private void initiateUIElements() {
